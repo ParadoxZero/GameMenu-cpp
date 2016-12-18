@@ -1,20 +1,20 @@
 /*
 *	Copyright (C) 2016 Sidhin S Thomas
 *
-*	This file is part of sfml-snake.
+*	This file is part of GameMenu.
 *
-*    sfml-snake is free software: you can redistribute it and/or modify
+*    GameMenu is free software: you can redistribute it and/or modify
 *   it under the terms of the GNU General Public License as published by
 *   the Free Software Foundation, either version 3 of the License, or
 *   (at your option) any later version.
 *
-*   sfml-snake is distributed in the hope that it will be useful,
+*   GameMenu is distributed in the hope that it will be useful,
 *   but WITHOUT ANY WARRANTY; without even the implied warranty of
 *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 *   GNU General Public License for more details.
 *
 *   You should have received a copy of the GNU General Public License
-*   along with sfml-snake.  If not, see <http://www.gnu.org/licenses/>.
+*   along with GameMenu.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef SS_USER_INTERFACE
@@ -43,6 +43,7 @@ namespace gmenu {
 	struct MenuItem {
 		Action *action;
 		std::string title;
+		sf::Font font;
 	};
 
 	/* Generic Menu - can be instantiated to generate a custom menu as needed over a sf::RenderWindow */
@@ -86,23 +87,20 @@ namespace gmenu {
 	public:
 		Menu(sf::RenderWindow *wnd) {
 			window = wnd;
-			//TODO
-			if (!MenuItemFont.loadFromFile("sansation.ttf"))
-				exit(0);
-			MenuTitleFont.loadFromFile("sansation.ttf");
 		}
 		
-		Menu(sf::RenderWindow *window, std::string title) : Menu(window) {
-			setTitle(title);
+		Menu(sf::RenderWindow *window, std::string title, sf::Font titleFont) : Menu(window) {
+			setTitle(title,titleFont);
 		}
 		
-		Menu(sf::RenderWindow *window, std::string title, MenuItem* items, int8_t length) : Menu(window, title) {
+		Menu(sf::RenderWindow *window, std::string title,sf::Font titleFont, MenuItem* items, int8_t length) 
+			: Menu(window, title, titleFont) {
 			setMenuItems(items, length);
 		}
 
 		void setMenuItems(MenuItem *, int8_t);
 		
-		void setTitle(std::string title);
+		void setTitle(std::string title, sf::Font font);
 		
 		void createMenu();
 

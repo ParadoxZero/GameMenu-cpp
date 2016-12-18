@@ -1,20 +1,20 @@
 /*
 *	Copyright (C) 2016 Sidhin S Thomas
 *
-*	This file is part of sfml-snake.
+*	This file is part of GameMenu.
 *
-*    sfml-snake is free software: you can redistribute it and/or modify
+*    GameMenu is free software: you can redistribute it and/or modify
 *   it under the terms of the GNU General Public License as published by
 *   the Free Software Foundation, either version 3 of the License, or
 *   (at your option) any later version.
 *
-*   sfml-snake is distributed in the hope that it will be useful,
+*   GameMenu is distributed in the hope that it will be useful,
 *   but WITHOUT ANY WARRANTY; without even the implied warranty of
 *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 *   GNU General Public License for more details.
 *
 *   You should have received a copy of the GNU General Public License
-*   along with sfml-snake.  If not, see <http://www.gnu.org/licenses/>.
+*   along with GameMenu.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <GameMenu/GameMenu.h>
@@ -22,8 +22,9 @@
 namespace gmenu {
 
 		/* Public function definitions*/
-	void Menu::setTitle(std::string title) {
+	void Menu::setTitle(std::string title, sf::Font font) {
 		menu_title = title;
+		MenuTitleFont = font;
 	}
 
 	void Menu::setMenuItems(MenuItem *items, int8_t length) {
@@ -112,7 +113,7 @@ namespace gmenu {
 			if (i == currently_selected_item) {
 				color = sf::Color::Yellow;
 			}
-			writeText(menu_items.entries[i].title, MenuItemFont, menu_location[i].size, menu_location[i].x, menu_location[i].y, color);
+			writeText(menu_items.entries[i].title, menu_items.entries[i].font, menu_location[i].size, menu_location[i].x, menu_location[i].y, color);
 			color = sf::Color::White;
 		}
 

@@ -138,7 +138,6 @@
     <ClInclude Include="include\GameMenu\GameMenu.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Makefile" />
     <ClCompile Include="src\GameMenu\GameMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
