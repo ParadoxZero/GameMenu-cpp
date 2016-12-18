@@ -17,8 +17,9 @@
 *   along with sfml-snake.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <Menu/menu.h>
-namespace ui {
+#include <GameMenu/GameMenu.h>
+
+namespace gmenu {
 
 		/* Public function definitions*/
 	void Menu::setTitle(std::string title) {
@@ -55,6 +56,7 @@ namespace ui {
 					}
 				}
 			} // while( pollEvent )
+
 			window->display();
 		} // while window open
 	} //create menu
@@ -66,7 +68,7 @@ namespace ui {
 		sf::Text text;
 		text.setString(str);
 		text.setFont(font);
-		text.setFillColor(color);
+		//text.setFillColor(color);
 		text.setCharacterSize(size);
 		sf::FloatRect textRect = text.getLocalBounds();
 		text.setOrigin(textRect.width / 2.0f,0);

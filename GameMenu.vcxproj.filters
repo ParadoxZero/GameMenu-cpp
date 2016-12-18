@@ -15,20 +15,22 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
+    <None Include=".gitignore" />
+    <None Include=".gitattributes" />
+    <None Include=".travis.yml" />
+    <None Include="ReadMe.md" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Menu\menu.h">
+    <ClInclude Include="include\GameMenu\GameMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Menu\Menu.cpp">
+    <ClCompile Include="src\GameMenu\GameMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include=".gitignore" />
-    <None Include=".gitattributes" />
+    <ClCompile Include="Makefile">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

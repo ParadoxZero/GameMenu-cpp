@@ -135,17 +135,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
+    <ClInclude Include="include\GameMenu\GameMenu.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Menu\menu.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\Menu\Menu.cpp" />
+    <ClCompile Include="Makefile" />
+    <ClCompile Include="src\GameMenu\GameMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
+    <None Include=".travis.yml" />
+    <None Include="ReadMe.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

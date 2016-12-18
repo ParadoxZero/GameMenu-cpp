@@ -23,7 +23,7 @@
 
 /*--- Headers ---*/
 #include <SFML/Graphics.hpp>
-namespace ui {
+namespace gmenu {
 
 	
 	/* Simple abstract class interface to implement Actions */
