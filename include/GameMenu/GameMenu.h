@@ -30,8 +30,40 @@ namespace gmenu {
 	struct MenuItem {
 		Action *action;
 		std::string title;
-		sf::Font font;
 	};
+
+	enum Layout {
+		TitleCentre,
+		TitleRight,
+		TitleLeft,
+
+		ItemCentre,
+		ItemRight,
+		ItemLeft,
+
+	};
+
+	struct Style {
+		sf::Font TitleFont;
+		sf::Font ItemFont;
+		sf::Color TitleColor;
+		sf::Color ItemColor;
+		sf::Color Selected;
+		unsigned int TitleFontSize;
+		unsigned int ItemFontSize;
+		Layout layout;
+		Style() {
+			TitleColor = sf::Color::Green;
+			ItemColor = sf::Color::Red;
+			Selected = sf::Color::Blue;
+			ItemFontSize = 20;
+			TitleFontSize = 50;
+		}
+	};
+
+
+	
+
 
 	class Menu {
 		/* Generic Menu - can be instantiated to generate a custom menu as needed over a sf::RenderWindow */
@@ -39,9 +71,10 @@ namespace gmenu {
 	public:
 		
 		/* Only accesible constructor */
-		Menu(sf::RenderWindow *window, std::string title,sf::Font titleFont, MenuItem* items, int8_t length) 
-			: Menu(window, title, titleFont) {
+		Menu(sf::RenderWindow *window, std::string title, MenuItem* items, int8_t length, Style style) 
+			: Menu(window, title) {
 			setMenuItems(items, length);
+			this->style = style;
 		}
 
 	
@@ -58,7 +91,7 @@ namespace gmenu {
 		void setMenuItems(MenuItem *, int8_t);
 		
 		/* In case the title needs to be changed */
-		void setTitle(std::string title, sf::Font font);
+		void setTitle(std::string title);
 		
 
 	private:
@@ -68,12 +101,12 @@ namespace gmenu {
 		}
 
 		
-		Menu( sf::RenderWindow *window, std::string title, sf::Font titleFont ) : Menu( window ) {
-			setTitle( title, titleFont );
+		Menu( sf::RenderWindow *window, std::string title ) : Menu( window ) {
+			setTitle( title);
 		}
 
 		void writeText( std::string string, sf::Font font, unsigned int size, float x, float y,
-			const sf::Color &color = sf::Color::White );
+			const sf::Color &color);
 
 		void setMenu();
 
@@ -91,12 +124,11 @@ namespace gmenu {
 
 		struct coordinates {
 			coordinates() {
-				x = y = 0.f; size = 0;
+				x = y = 0.f;
 			}
 			float x;
 			float y;
-			int size;
-		} *menu_location, title_location;
+		} *item_location, title_location;
 
 
 		/*==================================================*
@@ -105,8 +137,8 @@ namespace gmenu {
 
 		int currently_selected_item = 0;
 
-		sf::Font MenuItemFont;
-		sf::Font MenuTitleFont;
+		Style style;
+		
 		sf::RenderWindow *window;
 		std::string menu_title;
 

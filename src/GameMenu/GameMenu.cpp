@@ -13,9 +13,8 @@ namespace gmenu {
 	*				public functions					*
 	*===================================================*/
 
-	void Menu::setTitle(std::string title, sf::Font font) {
+	void Menu::setTitle(std::string title) {
 		menu_title = title;
-		MenuTitleFont = font;
 	}
 
 	void Menu::setMenuItems(MenuItem *items, int8_t length) {
@@ -70,7 +69,7 @@ namespace gmenu {
 		sf::Text text;
 		text.setString(str);
 		text.setFont(font);
-		//text.setFillColor(color);
+		text.setFillColor(color);
 		text.setCharacterSize(size);
 		sf::FloatRect textRect = text.getLocalBounds();
 		text.setOrigin(textRect.width / 2.0f,0);
@@ -84,38 +83,34 @@ namespace gmenu {
 		{
 			/* Small scope just to be able to freely use the variable names */
 			float x = (float) window->getSize().x / 2, y = 0;
-			int size = (int) window->getSize().y * MenuTitleScaleFactor;
 			title_location.x = x;
 			title_location.y = y;
-			title_location.size = size;
 		}
 
 		unsigned int menu_screen_height =(int) window->getSize().y * (1 -  MenuTitleScaleFactor);
 		unsigned int block_height = (int) menu_screen_height / menu_items.size * MenuItemScaleFactor;
-		unsigned int fontSize = (int) block_height * 3/4;
 		float x = (float)window->getSize().x / 2;
 		float y = (float)window->getSize().y - 0.75 * menu_screen_height + block_height * 1 / 8;
-		menu_location = new coordinates[menu_items.size];
+		item_location = new coordinates[menu_items.size];
 		/* Calculating Menu item locations */
 		for (int8_t i = 0; i < menu_items.size; ++i) {
-			menu_location[i].x = x;
-			menu_location[i].y = y;
-			menu_location[i].size = fontSize;
+			item_location[i].x = x;
+			item_location[i].y = y;
 			y += block_height;
 		}
 		
 	} //setMenu()
 
 	void Menu::drawMenu() {
-		writeText(menu_title, MenuTitleFont, title_location.size, title_location.x, title_location.y);
-		sf::Color color = sf::Color::White;
+		writeText(menu_title, style.TitleFont, style.TitleFontSize, title_location.x, title_location.y, style.TitleColor);
+		sf::Color color = style.ItemColor;
 		for (int i = 0; i < menu_items.size; ++i)
 		{
 			if (i == currently_selected_item) {
-				color = sf::Color::Yellow;
+				color = style.Selected;
 			}
-			writeText(menu_items.entries[i].title, menu_items.entries[i].font, menu_location[i].size, menu_location[i].x, menu_location[i].y, color);
-			color = sf::Color::White;
+			writeText(menu_items.entries[i].title, style.ItemFont, style.ItemFontSize, item_location[i].x, item_location[i].y, color);
+			color = style.ItemColor;
 		}
 
 	} //drawMenu()
