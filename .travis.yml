@@ -7,6 +7,6 @@ before_install:
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo add-apt-repository ppa:sonkun/sfml-development -y
   - sudo apt-get update -q
-  - sudo apt-get install gcc-4.8 g++-4.8 libsfml-dev -y
+  - sudo apt-get install gcc-4.8 g++-4.8  -y
 
 script: make CC='g++-4.8'
