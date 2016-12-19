@@ -1,5 +1,7 @@
 /*
 *	Copyright (C) 2016 Sidhin S Thomas
+*
+*	This software is licensed under the MIT License
 */
 
 #include <GameMenu/GameMenu.h>
