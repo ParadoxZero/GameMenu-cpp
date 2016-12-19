@@ -8,7 +8,11 @@
 
 namespace gmenu {
 
-		/* Public function definitions*/
+
+	/*==================================================*
+	*				public functions					*
+	*===================================================*/
+
 	void Menu::setTitle(std::string title, sf::Font font) {
 		menu_title = title;
 		MenuTitleFont = font;
@@ -19,6 +23,11 @@ namespace gmenu {
 		menu_items.size = length;
 	}
 
+
+	/* 
+	This function constains the main event loop for the menu
+	The actions performed : drawMenu() -> pollEvent() -> prefromAction()
+	*/
 	void Menu::createMenu() {
 		setMenu();
 		bool cont = true;
@@ -50,8 +59,13 @@ namespace gmenu {
 	} //create menu
 
 
-	/* Private function definitions */
 
+	/*==================================================*
+	*				Private Functions					*
+	*===================================================*/
+
+
+	/* Utility function */
 	void Menu::writeText(std::string str, sf::Font font, unsigned int size, float x, float y, const sf::Color &color) {
 		sf::Text text;
 		text.setString(str);
