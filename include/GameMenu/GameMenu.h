@@ -33,23 +33,75 @@ namespace gmenu {
 		sf::Font font;
 	};
 
-	/* Generic Menu - can be instantiated to generate a custom menu as needed over a sf::RenderWindow */
 	class Menu {
-	private:
+		/* Generic Menu - can be instantiated to generate a custom menu as needed over a sf::RenderWindow */
 
-		/* structures to hold the menu item informtion */
+	public:
+		
+		/* Only accesible constructor */
+		Menu(sf::RenderWindow *window, std::string title,sf::Font titleFont, MenuItem* items, int8_t length) 
+			: Menu(window, title, titleFont) {
+			setMenuItems(items, length);
+		}
+
+	
+
+	    /* This method is will start the menu and handover the screen control to it.
+		The Event loop will be controlled by this function after the call, and 
+		only after Back/exit on the menu will the control be returned.
+
+		The control is returned when an "gmenu::Action" object is called
+		whose start return "false" */
+		void createMenu();
+
+		/* In case menu items needs to be changed */
+		void setMenuItems(MenuItem *, int8_t);
+		
+		/* In case the title needs to be changed */
+		void setTitle(std::string title, sf::Font font);
+		
+
+	private:
+		
+		Menu( sf::RenderWindow *wnd ) {
+			window = wnd;
+		}
+
+		
+		Menu( sf::RenderWindow *window, std::string title, sf::Font titleFont ) : Menu( window ) {
+			setTitle( title, titleFont );
+		}
+
+		void writeText( std::string string, sf::Font font, unsigned int size, float x, float y,
+			const sf::Color &color = sf::Color::White );
+
+		void setMenu();
+
+		void drawMenu();
+
+
+		/*==================================================*
+		*				Internal structuers        			*
+		*===================================================*/
+
 		struct {
 			MenuItem *entries;
 			int8_t size;
 		} menu_items;
 
 		struct coordinates {
-			coordinates() { x = y = 0.f; size = 0; }
+			coordinates() {
+				x = y = 0.f; size = 0;
+			}
 			float x;
 			float y;
 			int size;
 		} *menu_location, title_location;
 
+
+		/*==================================================*
+		*					Data Members					*
+		*===================================================*/
 
 		int currently_selected_item = 0;
 
@@ -61,36 +113,6 @@ namespace gmenu {
 		// TODO: create an interface to set these
 		float MenuTitleScaleFactor = 0.125;
 		float MenuItemScaleFactor = 0.25;
-
-
-		void writeText(std::string string, sf::Font font, unsigned int size, float x, float y,
-			const sf::Color &color = sf::Color::White);
-
-		void setMenu();
-
-		void drawMenu();
-
-
-	public:
-		Menu(sf::RenderWindow *wnd) {
-			window = wnd;
-		}
-		
-		Menu(sf::RenderWindow *window, std::string title, sf::Font titleFont) : Menu(window) {
-			setTitle(title,titleFont);
-		}
-		
-		Menu(sf::RenderWindow *window, std::string title,sf::Font titleFont, MenuItem* items, int8_t length) 
-			: Menu(window, title, titleFont) {
-			setMenuItems(items, length);
-		}
-
-		void setMenuItems(MenuItem *, int8_t);
-		
-		void setTitle(std::string title, sf::Font font);
-		
-		void createMenu();
-
 
 	}; // Menu
 
