@@ -17,9 +17,9 @@ namespace gmenu {
 		menu_title = title;
 	}
 
-	void Menu::setMenuItems(MenuItem *items, int8_t length) {
+	void Menu::setMenuItems( std::vector<MenuItem> items ) {
 		menu_items.entries = items;
-		menu_items.size = length;
+		menu_items.size = items.size();
 	}
 
 
@@ -32,17 +32,14 @@ namespace gmenu {
 		bool cont = true;
 		while (window->isOpen() && cont)
 		{
-			window->clear();
-			drawMenu();
+			
 			sf::Event event;
 			while (window->pollEvent(event)) {
 				if (event.type == sf::Event::Closed)
 					window->close();
 				else if (event.type == sf::Event::KeyPressed) {
 					if (event.key.code == sf::Keyboard::Up) {
-						currently_selected_item = (currently_selected_item - 1);
-						if (currently_selected_item < 0)
-							currently_selected_item = menu_items.size - 1;
+						currently_selected_item = (currently_selected_item + menu_items.size - 1) % (menu_items.size);
 					}
 					else if (event.key.code == sf::Keyboard::Down) {
 						currently_selected_item = (currently_selected_item + 1) % (menu_items.size);
@@ -52,7 +49,9 @@ namespace gmenu {
 					}
 				}
 			} // while( pollEvent )
-
+			
+			window->clear();
+			drawMenu();
 			window->display();
 		} // while window open
 	} //create menu
@@ -91,18 +90,19 @@ namespace gmenu {
 		unsigned int block_height = (int) menu_screen_height / menu_items.size * MenuItemScaleFactor;
 		float x = (float)window->getSize().x / 2;
 		float y = (float)window->getSize().y - 0.75 * menu_screen_height + block_height * 1 / 8;
-		item_location = new coordinates[menu_items.size];
 		/* Calculating Menu item locations */
 		for (int8_t i = 0; i < menu_items.size; ++i) {
-			item_location[i].x = x;
-			item_location[i].y = y;
+			coordinates crd ;
+			crd.x = x;
+			crd.y = y;
+			item_location.push_back( crd );
 			y += block_height;
 		}
 		
 	} //setMenu()
 
 	void Menu::drawMenu() {
-		writeText(menu_title, style.TitleFont, style.TitleFontSize, title_location.x, title_location.y, style.TitleColor);
+		writeText(menu_title, style.ItemFont, style.TitleFontSize, title_location.x, title_location.y, style.TitleColor);
 		sf::Color color = style.ItemColor;
 		for (int i = 0; i < menu_items.size; ++i)
 		{
