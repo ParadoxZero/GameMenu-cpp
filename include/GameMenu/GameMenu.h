@@ -35,41 +35,41 @@ namespace gmenu {
 	/* BitFlags for Different possible Layouts */
 	enum Layout {
 
-		TitleCentre	= 1<<0,
-		TitleRight	= 1<<1,
-		TitleLeft	= 1<<2,
-					  
-		ItemCentre	= 1<<3,
-		ItemRight	= 1<<4,
-		ItemLeft	= 1<<5,
-					  
-		TitleFar	= 1<<6,
-		TitleNear	= 1<<7,
-		TitleNormal	= 1<<8,
+		TitleCentre = 1 << 0,
+		TitleRight = 1 << 1,
+		TitleLeft = 1 << 2,
 
-		ItemSpaceCompact	= 1<<9,
-		ItemSpaceNormal		= 1<<10,
-		ItemSpaceFar		= 1<<11,
+		ItemCentre = 1 << 3,
+		ItemRight = 1 << 4,
+		ItemLeft = 1 << 5,
 
+		Default = TitleCentre | ItemCentre
+					  
 	};
 
 	/* Defines the style of the menu */
 	struct Style {
 		sf::Font &TitleFont;
 		sf::Font &ItemFont;
-		sf::Color TitleColor;
-		sf::Color ItemColor;
-		sf::Color Selected;
-		unsigned int TitleFontSize;
-		unsigned int ItemFontSize;
-		Layout layout;
+
+		sf::Color TitleColor = sf::Color::Green;;
+		sf::Color ItemColor = sf::Color::Red ;
+		sf::Color Selected = sf::Color::Blue;
+
+		unsigned int TitleFontSize = 50;
+		unsigned int ItemFontSize = 20;
+
+		float MenuTitleScaleFactor = 0.125;
+		float MenuItemScaleFactor = 0.25;
+
+		struct {
+			unsigned int top, left;
+		} Padding;
+
+		int layout = Layout::Default;
 		Style(sf::Font &mf, sf::Font &itmf):
-		TitleFont(mf),ItemFont(itmf){
-			TitleColor = sf::Color::Green;
-			ItemColor = sf::Color::Red;
-			Selected = sf::Color::Blue;
-			ItemFontSize = 20;
-			TitleFontSize = 50;
+			TitleFont( mf ), ItemFont( itmf ), Padding {10,0}
+		{	
 		}
 	};
 
@@ -146,8 +146,7 @@ namespace gmenu {
 		std::string menu_title;
 
 		// TODO: create an interface to set these
-		float MenuTitleScaleFactor = 0.125;
-		float MenuItemScaleFactor = 0.25;
+		
 
 	}; // Menu
 

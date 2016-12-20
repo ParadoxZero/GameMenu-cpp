@@ -5,7 +5,7 @@
 */
 
 #include <GameMenu/GameMenu.h>
-
+#include <iostream>
 namespace gmenu {
 
 
@@ -72,31 +72,50 @@ namespace gmenu {
 		text.setCharacterSize(size);
 		sf::FloatRect textRect = text.getLocalBounds();
 		text.setOrigin(textRect.width / 2.0f,0);
+		if ( x - textRect.width / 2.0f < 0 ) {
+			//std::cout << x << " " << textRect.width / 2.0f;
+			x = textRect.width / 2 + style.Padding.left;
+		}
 		text.setPosition(sf::Vector2f(x,y));
 		window->draw(text);
 	} //writeText(...)
 
 	void Menu::setMenu() {
 
+		std::cout << "screen size:" << window->getSize().x << " " << window->getSize().y << std::endl;
+
 		/* Setting title of menu */
 		{
 			/* Small scope just to be able to freely use the variable names */
-			float x = (float) window->getSize().x / 2, y = 0;
-			title_location.x = x;
+			int offset_coefficient = 0.5;
+			if ( style.layout & Layout::TitleCentre == Layout::TitleCentre ) offset_coefficient = 0.5;
+			else if ( style.layout & Layout::TitleLeft == Layout::TitleLeft ) offset_coefficient = 0.25;
+			else if ( style.layout & Layout::TitleRight == Layout::TitleRight ) offset_coefficient = 0.75;
+			float x = (float) window->getSize().x * offset_coefficient, y = style.Padding.top;
+			title_location.x = (x + style.Padding.left);
 			title_location.y = y;
+			std::cout << "title_location:" << title_location.x << " "<<title_location.y<<offset_coefficient<<std::endl;
 		}
 
-		unsigned int menu_screen_height =(int) window->getSize().y * (1 -  MenuTitleScaleFactor);
-		unsigned int block_height = (int) menu_screen_height / menu_items.size * MenuItemScaleFactor;
-		float x = (float)window->getSize().x / 2;
-		float y = (float)window->getSize().y - 0.75 * menu_screen_height + block_height * 1 / 8;
+		unsigned int menu_screen_height =(int) window->getSize().y * (1 -  style.MenuTitleScaleFactor);
+		unsigned int block_height = (int) menu_screen_height / menu_items.size * style.MenuItemScaleFactor;
+		
+		float offset_coefficient = 0.5;
+		if ( style.layout & Layout::ItemCentre == Layout::ItemCentre ) offset_coefficient = 0.5;
+		else if ( style.layout & Layout::ItemLeft == Layout::ItemLeft ) offset_coefficient = 0.25;
+		else if ( style.layout & Layout::ItemRight == Layout::ItemRight) offset_coefficient = 0.75;
+
+		float x = (float)window->getSize().x * offset_coefficient + style.Padding.left;
+		float y = ((float)window->getSize().y) - 0.75 * menu_screen_height + block_height * 1 / 8;
 		/* Calculating Menu item locations */
 		for (int8_t i = 0; i < menu_items.size; ++i) {
 			coordinates crd ;
 			crd.x = x;
 			crd.y = y;
 			item_location.push_back( crd );
+			std::cout << "menu location:" << x << " " << y <<offset_coefficient<< std::endl;
 			y += block_height;
+
 		}
 		
 	} //setMenu()
@@ -114,6 +133,7 @@ namespace gmenu {
 		}
 
 	} //drawMenu()
+
 
 
 } // namespace sui

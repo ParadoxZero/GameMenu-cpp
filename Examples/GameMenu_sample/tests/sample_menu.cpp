@@ -18,6 +18,7 @@ void main() {
 	sf::Font font;
 	font.loadFromFile( "sansation.ttf" );
 	gmenu::Style style( font, font );
+	style.layout = gmenu::Layout::TitleCentre;
 	for ( int i = 0; i < 3; ++i ) {
 		item.title = text[i];
 		item.action = new test::testAction();
