@@ -14,12 +14,11 @@ namespace gmenu {
 	*===================================================*/
 
 	void Menu::setTitle(std::string title) {
-		menu_title = title;
+		menuTitle = title;
 	}
 
 	void Menu::setMenuItems( std::vector<MenuItem> items ) {
-		menu_items.entries = items;
-		menu_items.size = items.size();
+		menuItems = items;
 	}
 
 
@@ -30,30 +29,29 @@ namespace gmenu {
 	void Menu::createMenu() {
 		setMenu();
 		bool cont = true;
-		while (window->isOpen() && cont)
+		while (window.isOpen() && cont)
 		{
-			
 			sf::Event event;
-			while (window->pollEvent(event)) {
+			while (window.pollEvent(event)) {
 				if (event.type == sf::Event::Closed)
-					window->close();
+					window.close();
 				else if (event.type == sf::Event::KeyPressed) {
 					if (event.key.code == sf::Keyboard::Up) {
-						currently_selected_item = (currently_selected_item + menu_items.size - 1) % (menu_items.size);
+						currently_selected_item = (currently_selected_item + menuItems.size() - 1) % (menuItems.size());
 					}
 					else if (event.key.code == sf::Keyboard::Down) {
-						currently_selected_item = (currently_selected_item + 1) % (menu_items.size);
+						currently_selected_item = (currently_selected_item + 1) % (menuItems.size());
 					}
 					else if (event.key.code == sf::Keyboard::Return) {
-						cont = menu_items.entries[currently_selected_item].action->start();
+						cont = menuItems[currently_selected_item].action->start();
 					}
 				}
 			} // while( pollEvent )
 			
-			window->clear();
+			window.clear();
 			drawMenu();
-			window->display();
-		} // while window open
+			window.display();
+		} // while window open	
 	} //create menu
 
 
@@ -77,12 +75,12 @@ namespace gmenu {
 			x = textRect.width / 2 + style.Padding.left;
 		}
 		text.setPosition(sf::Vector2f(x,y));
-		window->draw(text);
+		window.draw(text);
 	} //writeText(...)
 
 	void Menu::setMenu() {
 
-		std::cout << "screen size:" << window->getSize().x << " " << window->getSize().y << std::endl;
+		std::cout << "screen size:" << window.getSize().x << " " << window.getSize().y << std::endl;
 
 		/* Setting title of menu */
 		{
@@ -91,24 +89,24 @@ namespace gmenu {
 			if ( style.layout & Layout::TitleCentre == Layout::TitleCentre ) offset_coefficient = 0.5;
 			else if ( style.layout & Layout::TitleLeft == Layout::TitleLeft ) offset_coefficient = 0.25;
 			else if ( style.layout & Layout::TitleRight == Layout::TitleRight ) offset_coefficient = 0.75;
-			float x = (float) window->getSize().x * offset_coefficient, y = style.Padding.top;
+			float x = (float) window.getSize().x * offset_coefficient, y = style.Padding.top;
 			title_location.x = (x + style.Padding.left);
 			title_location.y = y;
 			std::cout << "title_location:" << title_location.x << " "<<title_location.y<<offset_coefficient<<std::endl;
 		}
 
-		unsigned int menu_screen_height =(int) window->getSize().y * (1 -  style.MenuTitleScaleFactor);
-		unsigned int block_height = (int) menu_screen_height / menu_items.size * style.MenuItemScaleFactor;
+		unsigned int menu_screen_height =(int) window.getSize().y * (1 -  style.MenuTitleScaleFactor);
+		unsigned int block_height = (int) menu_screen_height / menuItems.size() * style.MenuItemScaleFactor;
 		
 		float offset_coefficient = 0.5;
 		if ( style.layout & Layout::ItemCentre == Layout::ItemCentre ) offset_coefficient = 0.5;
 		else if ( style.layout & Layout::ItemLeft == Layout::ItemLeft ) offset_coefficient = 0.25;
 		else if ( style.layout & Layout::ItemRight == Layout::ItemRight) offset_coefficient = 0.75;
 
-		float x = (float)window->getSize().x * offset_coefficient + style.Padding.left;
-		float y = ((float)window->getSize().y) - 0.75 * menu_screen_height + block_height * 1 / 8;
+		float x = (float)window.getSize().x * offset_coefficient + style.Padding.left;
+		float y = ((float)window.getSize().y) - 0.75 * menu_screen_height + block_height * 1 / 8;
 		/* Calculating Menu item locations */
-		for (int8_t i = 0; i < menu_items.size; ++i) {
+		for (int8_t i = 0; i < menuItems.size(); ++i) {
 			coordinates crd ;
 			crd.x = x;
 			crd.y = y;
@@ -121,14 +119,14 @@ namespace gmenu {
 	} //setMenu()
 
 	void Menu::drawMenu() {
-		writeText(menu_title, style.ItemFont, style.TitleFontSize, title_location.x, title_location.y, style.TitleColor);
+		writeText(menuTitle, style.ItemFont, style.TitleFontSize, title_location.x, title_location.y, style.TitleColor);
 		sf::Color color = style.ItemColor;
-		for (int i = 0; i < menu_items.size; ++i)
+		for (int i = 0; i < menuItems.size(); ++i)
 		{
 			if (i == currently_selected_item) {
 				color = style.Selected;
 			}
-			writeText(menu_items.entries[i].title, style.ItemFont, style.ItemFontSize, item_location[i].x, item_location[i].y, color);
+			writeText( menuItems[i].title, style.ItemFont, style.ItemFontSize, item_location[i].x, item_location[i].y, color);
 			color = style.ItemColor;
 		}
 

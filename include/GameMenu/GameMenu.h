@@ -81,13 +81,11 @@ namespace gmenu {
 
 	public:
 		
-		/* Only accesible constructor */
+		/* Only available constructor */
 		Menu(sf::RenderWindow &wnd, std::string title, std::vector<MenuItem> items, Style &st):
-		style(st) {
-			window = &wnd;
-			setTitle( title );
-			setMenuItems( items );
-			
+			style( st ), window (wnd) {
+			menuTitle = title;
+			menuItems = items;
 		}
 
 	    /* This method is will start the menu and handover the screen control to it.
@@ -120,17 +118,11 @@ namespace gmenu {
 		*				Internal structuers        			*
 		*===================================================*/
 
-		struct {
-			std::vector<MenuItem> entries;
-			int size;
-		} menu_items;
+		std::vector<MenuItem> menuItems;
 
 		struct coordinates {
-			coordinates() {
-				x = y = 0.f;
-			}
-			float x;
-			float y;
+			float x = 0;
+			float y = 0;
 		}  title_location;
 		std::vector<coordinates> item_location;
 
@@ -142,13 +134,11 @@ namespace gmenu {
 
 		Style &style;
 		
-		sf::RenderWindow *window;
-		std::string menu_title;
-
-		// TODO: create an interface to set these
-		
+		sf::RenderWindow &window;
+		std::string menuTitle;		
 
 	}; // Menu
 
-} // namespace sui
+} // namespace gmenu
+
 #endif
