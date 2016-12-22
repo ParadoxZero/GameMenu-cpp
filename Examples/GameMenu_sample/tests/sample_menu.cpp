@@ -19,7 +19,7 @@ void main() {
 	sf::Font font;
 	font.loadFromFile( "sansation.ttf" );
 	gmenu::Style style( font, font );
-	style.layout = gmenu::Layout::TitleCentre|gmenu::Layout::ItemRight;
+	style.layout = gmenu::Layout::TitleRight|gmenu::Layout::ItemRight;
 	for ( int i = 0; i < 3; ++i ) {
 		item.title = text[i];
 		item.action = std::make_shared < test::testAction>();

@@ -74,6 +74,10 @@ namespace gmenu {
 			//std::cout << x << " " << textRect.width / 2.0f;
 			x = textRect.width / 2 + style.Padding.left;
 		}
+		if ( x + textRect.width / 2.0f > window.getSize().x ) {
+			//std::cout << x << " " << textRect.width / 2.0f;
+			x = window.getSize().x - textRect.width/2 + style.Padding.left;
+		}
 		text.setPosition(sf::Vector2f(x,y));
 		window.draw(text);
 	} //writeText(...)
@@ -86,9 +90,9 @@ namespace gmenu {
 		{
 			/* Small scope just to be able to freely use the variable names */
 			float offset_coefficient = 0.5;
-			if ( style.layout & Layout::TitleCentre == Layout::TitleCentre ) offset_coefficient = 0.5;
-			else if ( style.layout & Layout::TitleLeft == Layout::TitleLeft ) offset_coefficient = 0.25;
-			else if ( style.layout & Layout::TitleRight == Layout::TitleRight ) offset_coefficient = 0.75;
+			if ( style.layout & Layout::TitleCentre ) offset_coefficient = 0.5;
+			else if ( style.layout & Layout::TitleLeft ) offset_coefficient = 0.25;
+			else if ( style.layout & Layout::TitleRight ) offset_coefficient = 0.75;
 			float x = (float) window.getSize().x * offset_coefficient, y = style.Padding.top;
 			title_location.x = (x + style.Padding.left);
 			title_location.y = y;
@@ -99,9 +103,9 @@ namespace gmenu {
 		unsigned int block_height = (int) menu_screen_height / menuItems.size() * style.MenuItemScaleFactor;
 		
 		float offset_coefficient = 0.5;
-		if ( style.layout & Layout::ItemCentre == Layout::ItemCentre ) offset_coefficient = 0.5;
-		else if ( style.layout & Layout::ItemLeft == Layout::ItemLeft ) offset_coefficient = 0.25;
-		else if ( style.layout & Layout::ItemRight == Layout::ItemRight) offset_coefficient = 0.75;
+		if ( style.layout & Layout::ItemCentre  ) offset_coefficient = 0.5;
+		else if ( style.layout & Layout::ItemLeft ) offset_coefficient = 0.25;
+		else if ( style.layout & Layout::ItemRight ) offset_coefficient = 0.75;
 
 		float x = (float)window.getSize().x * offset_coefficient + style.Padding.left;
 		float y = ((float)window.getSize().y) - 0.75 * menu_screen_height + block_height * 1 / 8;
