@@ -60,11 +60,8 @@ The main purpose of the library is to make creation of menu's in games easy. Thi
 * Vola, your menu is ready to be used.
      
 
-##Screenshots
+##[Screenshots!](Screenshots.md)
 
-![From sfml-snake](Screenshots/2016-12-19.png?raw=true "Sample Main Menu")
-
-![From sfml-snake](Screenshots/2016-12-19%20(1).png?raw=true "Sample Exit dialog")
 ##Dependencies
   * [Simple and Fast Multimedia Library](http://www.sfml-dev.org/index.php)
   
