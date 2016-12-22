@@ -30,7 +30,7 @@ namespace gmenu {
 		setMenu();
 		bool cont = true;
 		while (window.isOpen() && cont)
-		{
+		{	
 			sf::Event event;
 			while (window.pollEvent(event)) {
 				if (event.type == sf::Event::Closed)
@@ -43,7 +43,7 @@ namespace gmenu {
 						currently_selected_item = (currently_selected_item + 1) % (menuItems.size());
 					}
 					else if (event.key.code == sf::Keyboard::Return) {
-						cont = menuItems[currently_selected_item].action->start();
+						cont = menuItems.at(currently_selected_item).action->start();
 					}
 				}
 			} // while( pollEvent )
@@ -85,7 +85,7 @@ namespace gmenu {
 		/* Setting title of menu */
 		{
 			/* Small scope just to be able to freely use the variable names */
-			int offset_coefficient = 0.5;
+			float offset_coefficient = 0.5;
 			if ( style.layout & Layout::TitleCentre == Layout::TitleCentre ) offset_coefficient = 0.5;
 			else if ( style.layout & Layout::TitleLeft == Layout::TitleLeft ) offset_coefficient = 0.25;
 			else if ( style.layout & Layout::TitleRight == Layout::TitleRight ) offset_coefficient = 0.75;

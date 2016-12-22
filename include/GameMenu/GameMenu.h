@@ -10,6 +10,7 @@
 
 /*--- Headers ---*/
 #include <SFML/Graphics.hpp>
+#include <memory>
 namespace gmenu {
 
 	
@@ -28,7 +29,7 @@ namespace gmenu {
 	};
 
 	struct MenuItem {
-		Action *action;
+		std::shared_ptr<Action> action;
 		std::string title;
 	};
 

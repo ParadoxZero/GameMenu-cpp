@@ -1,5 +1,6 @@
 #include "GameMenu\GameMenu.h"
 #include <SFML\Graphics.hpp>
+#include <memory>
 
 namespace test {
 	class testAction : public gmenu::Action {
@@ -18,10 +19,10 @@ void main() {
 	sf::Font font;
 	font.loadFromFile( "sansation.ttf" );
 	gmenu::Style style( font, font );
-	style.layout = gmenu::Layout::TitleCentre;
+	style.layout = gmenu::Layout::TitleCentre|gmenu::Layout::ItemRight;
 	for ( int i = 0; i < 3; ++i ) {
 		item.title = text[i];
-		item.action = new test::testAction();
+		item.action = std::make_shared < test::testAction>();
 		itemList.push_back( item );
 	}
 	gmenu::Menu menu( w, "Sample Menu", itemList, style );
