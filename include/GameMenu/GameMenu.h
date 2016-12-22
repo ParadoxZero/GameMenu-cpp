@@ -44,7 +44,7 @@ namespace gmenu {
 		ItemRight = 1 << 4,
 		ItemLeft = 1 << 5,
 
-		Default = TitleCentre | ItemCentre
+		Default = TitleCentre | ItemCentre,
 					  
 	};
 
@@ -60,16 +60,16 @@ namespace gmenu {
 		unsigned int TitleFontSize = 50;
 		unsigned int ItemFontSize = 20;
 
-		float MenuTitleScaleFactor = 0.125;
+		float MenuTitleScaleFactor = 1.25;
 		float MenuItemScaleFactor = 0.25;
 
 		struct {
-			unsigned int top, left;
-		} Padding;
+			signed int top, left;
+		} PaddingItems, PaddingTitle;
 
 		int layout = Layout::Default;
 		Style(sf::Font &mf, sf::Font &itmf):
-			TitleFont( mf ), ItemFont( itmf ), Padding {10,0}
+			TitleFont( mf ), ItemFont( itmf ), PaddingTitle {10,0}, PaddingItems {0,0}
 		{	
 		}
 	};

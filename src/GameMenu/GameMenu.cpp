@@ -72,11 +72,11 @@ namespace gmenu {
 		text.setOrigin(textRect.width / 2.0f,0);
 		if ( x - textRect.width / 2.0f < 0 ) {
 			//std::cout << x << " " << textRect.width / 2.0f;
-			x = textRect.width / 2 + style.Padding.left;
+			x = textRect.width / 2 + style.PaddingTitle.left;
 		}
 		if ( x + textRect.width / 2.0f > window.getSize().x ) {
 			//std::cout << x << " " << textRect.width / 2.0f;
-			x = window.getSize().x - textRect.width/2 + style.Padding.left;
+			x = window.getSize().x - textRect.width/2 + style.PaddingTitle.left;
 		}
 		text.setPosition(sf::Vector2f(x,y));
 		window.draw(text);
@@ -93,21 +93,22 @@ namespace gmenu {
 			if ( style.layout & Layout::TitleCentre ) offset_coefficient = 0.5;
 			else if ( style.layout & Layout::TitleLeft ) offset_coefficient = 0.25;
 			else if ( style.layout & Layout::TitleRight ) offset_coefficient = 0.75;
-			float x = (float) window.getSize().x * offset_coefficient, y = style.Padding.top;
-			title_location.x = (x + style.Padding.left);
+			float x = (float) window.getSize().x * offset_coefficient, y = style.PaddingTitle.top;
+			title_location.x = (x + style.PaddingTitle.left);
 			title_location.y = y;
 			std::cout << "title_location:" << title_location.x << " "<<title_location.y<<offset_coefficient<<std::endl;
 		}
 
-		unsigned int menu_screen_height =(int) window.getSize().y * (1 -  style.MenuTitleScaleFactor);
-		unsigned int block_height = (int) menu_screen_height / menuItems.size() * style.MenuItemScaleFactor;
+		unsigned int menu_screen_height =(int) window.getSize().y  -  title_location.y + style.PaddingItems.top ;
+		std::cout << "Screen hieght" << menu_screen_height << std::endl;
+		unsigned int block_height = (int) menu_screen_height/menuItems.size() * style.MenuItemScaleFactor;
 		
 		float offset_coefficient = 0.5;
 		if ( style.layout & Layout::ItemCentre  ) offset_coefficient = 0.5;
 		else if ( style.layout & Layout::ItemLeft ) offset_coefficient = 0.25;
 		else if ( style.layout & Layout::ItemRight ) offset_coefficient = 0.75;
 
-		float x = (float)window.getSize().x * offset_coefficient + style.Padding.left;
+		float x = (float)window.getSize().x * offset_coefficient + style.PaddingItems.left;
 		float y = ((float)window.getSize().y) - 0.75 * menu_screen_height + block_height * 1 / 8;
 		/* Calculating Menu item locations */
 		for (int8_t i = 0; i < menuItems.size(); ++i) {
