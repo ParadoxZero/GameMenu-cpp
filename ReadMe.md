@@ -42,15 +42,14 @@ The main purpose of the library is to make creation of menu's in games easy. Thi
 
       unsigned int TitleFontSize = 50;
       unsigned int ItemFontSize = 20;
-
-      float MenuTitleScaleFactor = 0.125; //This scale determines the distance between Title and the first option
+      
       float MenuItemScaleFactor = 0.25; // This determines the distance between options. 
       
       int layout = Layout::Default; // Bitflag, Defines the layout of menu. eg. Layout::ItemLeft| Layout::TitleCentre
 
       struct {
        signed int top, left;
-      } Padding; // this is the padding that will extra displacement that will always be added.
+      } PaddingTitle, PaddingItems; // this is the padding that will extra displacement that will always be added.
      ```
      
 * Now create an object of `gmenuMenu` which require the following parameters:
