@@ -25,7 +25,7 @@ The main purpose of the library is to make creation of menu's in games easy. Thi
     ```
     
      Here `gmenu::Action` is an abstract Class that acts as an interface.
-     The virtual method `bool DerivedAction::start()` will be called by the Menu when that item is selected.
+     The virtual method `void DerivedAction::start()` will be called by the Menu when that item is selected.
     
  
 * Now create a style. `gmenu::Style`

@@ -25,7 +25,7 @@ namespace gmenu {
 		usefull when you need to implement a feature after which it should not return to the menu.
 		eg. Back/Exit/Game Mode etc.
 		*/
-		virtual bool start() = 0;
+		virtual void start() = 0;
 	};
 
 	struct MenuItem {
@@ -64,7 +64,7 @@ namespace gmenu {
 		float MenuItemScaleFactor = 0.25;
 
 		struct {
-			signed int top, left;
+			float top, left;
 		} PaddingItems, PaddingTitle;
 
 		int layout = Layout::Default;
@@ -87,15 +87,15 @@ namespace gmenu {
 			style( st ), window (wnd) {
 			menuTitle = title;
 			menuItems = items;
+			setMenu();
 		}
 
-	    /* This method is will start the menu and handover the screen control to it.
-		The Event loop will be controlled by this function after the call, and 
-		only after Back/exit on the menu will the control be returned.
+	    /* Handles the events that occured and takes action accordingly" */
+		void handleEvent(sf::Event);
 
-		The control is returned when an "gmenu::Action" object is called
-		whose start return "false" */
-		void createMenu();
+		/* Renders the menu to the window */
+		void drawMenu();
+
 
 		/* In case menu items needs to be changed */
 		void setMenuItems( std::vector<MenuItem> );
@@ -112,7 +112,6 @@ namespace gmenu {
 
 		void setMenu();
 
-		void drawMenu();
 
 
 		/*==================================================*
@@ -121,11 +120,8 @@ namespace gmenu {
 
 		std::vector<MenuItem> menuItems;
 
-		struct coordinates {
-			float x = 0;
-			float y = 0;
-		}  title_location;
-		std::vector<coordinates> item_location;
+		sf::Vector2f title_location;
+		std::vector<sf::Vector2f> item_location;
 
 		/*==================================================*
 		*					Data Members					*

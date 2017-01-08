@@ -5,8 +5,8 @@
 namespace test {
 	class testAction : public gmenu::Action {
 	public:
-		bool start() {
-			return true;
+		void start() {
+			exit(0);
 		}
 	};
 }
@@ -32,6 +32,15 @@ void main() {
 		itemList.push_back( item );
 	}
 	gmenu::Menu menu( w, "Sample Menu", itemList, style );
-	menu.createMenu();
+	while ( w.isOpen()  ) {
+		w.clear();
+		sf::Event event;
+		while ( w.pollEvent( event ) ) {
+			menu.handleEvent( event );
+		}
+		menu.drawMenu();
+		w.display();
+	}
+
 }
 
