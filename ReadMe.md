@@ -1,5 +1,6 @@
 #GameMenu 
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5d324ea6258443a99146a2af7cc38aca)](https://www.codacy.com/app/ParadoxZero/GameMenu-cpp?utm_source=github.com&utm_medium=referral&utm_content=ParadoxZero/GameMenu-cpp&utm_campaign=badger)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)   ![Language (C++)](https://img.shields.io/badge/powered_by-C++-brightgreen.svg?style=flat-square)   [![Build Status](https://travis-ci.org/ParadoxZero/GameMenu-cpp.svg?branch=master)](https://travis-ci.org/ParadoxZero/GameMenu-cpp)  
 
  
