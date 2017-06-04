@@ -1,17 +1,17 @@
-#include "GameMenu\GameMenu.h"
-#include <SFML\Graphics.hpp>
+#include <GameMenu.h>
+#include <SFML/Graphics.hpp>
 #include <memory>
 
 namespace test {
 	class testAction : public gmenu::Action {
 	public:
-		bool start() {
-			return true;
+		void start() {
+			exit(0);
 		}
 	};
 }
 
-void main() {
+int main() {
 	sf::RenderWindow w( sf::VideoMode( 800, 600 ), "Sample Title", sf::Style::Close);
 	std::vector<gmenu::MenuItem> itemList;
 	std::string text[4] = { "Option1", "Option2","Option3", "Option4" };
@@ -32,6 +32,15 @@ void main() {
 		itemList.push_back( item );
 	}
 	gmenu::Menu menu( w, "Sample Menu", itemList, style );
-	menu.createMenu();
+	while ( w.isOpen()  ) {
+		w.clear();
+		sf::Event event;
+		while ( w.pollEvent( event ) ) {
+			menu.handleEvent( event );
+		}
+		menu.drawMenu();
+		w.display();
+	}
+    return 0;
 }
 

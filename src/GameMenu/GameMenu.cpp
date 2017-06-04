@@ -26,31 +26,20 @@ namespace gmenu {
 	This function constains the main event loop for the menu
 	The actions performed : drawMenu() -> pollEvent() -> prefromAction()
 	*/
-	void Menu::createMenu() {
-		setMenu();
-		bool cont = true;
-		while (window.isOpen() && cont)
-		{	
-			sf::Event event;
-			while (window.pollEvent(event)) {
-				if (event.type == sf::Event::Closed)
-					window.close();
-				else if (event.type == sf::Event::KeyPressed) {
-					if (event.key.code == sf::Keyboard::Up) {
-						currently_selected_item = (currently_selected_item + menuItems.size() - 1) % (menuItems.size());
-					}
-					else if (event.key.code == sf::Keyboard::Down) {
-						currently_selected_item = (currently_selected_item + 1) % (menuItems.size());
-					}
-					else if (event.key.code == sf::Keyboard::Return) {
-						cont = menuItems.at(currently_selected_item).action->start();
-					}
-				}
-			} // while( pollEvent )
-			
-			window.clear();
-			drawMenu();
-			window.display();
+	void Menu::handleEvent(sf::Event event) {
+		
+		if (event.type == sf::Event::Closed)
+			window.close();
+		else if (event.type == sf::Event::KeyPressed) {
+			if (event.key.code == sf::Keyboard::Up) {
+				currently_selected_item = (currently_selected_item + (int)menuItems.size() - 1) % (menuItems.size());
+			}
+			else if (event.key.code == sf::Keyboard::Down) {
+				currently_selected_item = (currently_selected_item + 1) % (menuItems.size());
+			}
+			else if (event.key.code == sf::Keyboard::Return) {
+				menuItems.at(currently_selected_item).action->start();
+			}
 		} // while window open	
 	} //create menu
 
@@ -99,9 +88,9 @@ namespace gmenu {
 			std::cout << "title_location:" << title_location.x << " "<<title_location.y<<offset_coefficient<<std::endl;
 		}
 
-		unsigned int menu_screen_height =(int) window.getSize().y  -  title_location.y + style.PaddingItems.top ;
+		float menu_screen_height =(int) window.getSize().y  -  title_location.y + style.PaddingItems.top ;
 		std::cout << "Screen hieght" << menu_screen_height << std::endl;
-		unsigned int block_height = (int) menu_screen_height/menuItems.size() * style.MenuItemScaleFactor;
+		float block_height = (int) menu_screen_height/menuItems.size() * style.MenuItemScaleFactor;
 		
 		float offset_coefficient = 0.5;
 		if ( style.layout & Layout::ItemCentre  ) offset_coefficient = 0.5;
@@ -109,10 +98,10 @@ namespace gmenu {
 		else if ( style.layout & Layout::ItemRight ) offset_coefficient = 0.75;
 
 		float x = (float)window.getSize().x * offset_coefficient + style.PaddingItems.left;
-		float y = ((float)window.getSize().y) - 0.75 * menu_screen_height + block_height * 1 / 8;
+		float y = ((float)window.getSize().y) - 0.75f * menu_screen_height + block_height * 1.f / 8.f;
 		/* Calculating Menu item locations */
 		for (int8_t i = 0; i < menuItems.size(); ++i) {
-			coordinates crd ;
+			sf::Vector2f crd ;
 			crd.x = x;
 			crd.y = y;
 			item_location.push_back( crd );
