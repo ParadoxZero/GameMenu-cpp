@@ -34,8 +34,8 @@ FetchContent_MakeAvailable(SFML)
 
 
 set(SOURCES 
-    "include/GameMenu/GameMenu.h"
-    "src/GameMenu/GameMenu.cpp"
+    "public/game_menu/game_menu.h"
+    "src/game_menu_impl.cpp"
 )
 
 add_library(gamemenu ${LINK_TYPE} ${SOURCES})
