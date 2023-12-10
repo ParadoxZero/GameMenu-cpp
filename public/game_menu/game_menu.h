@@ -9,15 +9,15 @@
 
 namespace game_menu {
 
-typedef struct __menu_context* MENU;
+typedef struct __menu_context MENU;
 
-typedef uint8_t Color;
+typedef uint32_t Color;
 
 enum Align { Left = 0, Center = 1, Right = 2 };
 
 struct MenuItem {
-  std::function<void(sf::RenderTarget &)> action;
   std::string name;
+  std::function<void(sf::RenderTarget &)> action;
 };
 
 struct ColorScheme {
@@ -62,9 +62,9 @@ struct MenuConfig {
 
 extern "C" {
 
-game_menu::MENU create_menu_context(sf::RenderWindow &wnd, game_menu::MenuConfig &config);
-void destroy_menu_context(game_menu::MENU menu);
-
-void handle_event(game_menu::MENU menu, sf::Event &event);
+game_menu::MENU* create_menu_context(sf::RenderWindow &wnd, game_menu::MenuConfig &config);
+void menu_destroy_context(game_menu::MENU* menu);
+void menu_handle_event(game_menu::MENU* menu, sf::Event &event);
+void menu_render(game_menu::MENU* menu);
 
 }

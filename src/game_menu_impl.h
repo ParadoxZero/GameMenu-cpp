@@ -9,6 +9,7 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 namespace game_menu {
 struct coordinates {
@@ -17,7 +18,7 @@ struct coordinates {
 };
 
 struct Item {
-  MenuItem item_data;
+  MenuItem data;
   coordinates location;
 };
 
@@ -25,13 +26,15 @@ class Menu {
 public:
   Menu(sf::RenderTarget &window, MenuConfig config)
       : _window(window), _style(config.style), _title(config.title) {
-    _items.resize(config.items.size());
     for (auto &menu_item : config.items) {
       _items.push_back({menu_item, {0, 0}});
+      std::cout << " Processing item " << menu_item.name << std::endl;
     }
+    std::cout << "Size of items : " << _items.size() << std::endl;
   }
 
   void handleEvent(sf::Event &event);
+  void render();
 
 private:
   void setMenu();
