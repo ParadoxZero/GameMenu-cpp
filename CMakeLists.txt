@@ -29,7 +29,6 @@ FetchContent_MakeAvailable(SFML)
 set(SOURCES 
     "public/game_menu/game_menu.h"
     "src/game_menu_impl.cpp"
-    "src/GameMenu/GameMenu.cpp"
 )
 
 add_library(gamemenu ${LINK_TYPE} ${SOURCES})
@@ -43,8 +42,8 @@ target_include_directories(
 
 set(GMENU_HEADERS
     "public/game_menu/game_menu.h"
-    "include/GameMenu/GameMenu.h"
 )
+
 set_target_properties(gamemenu PROPERTIES
     FRAMEWORK TRUE
     FRAMEWORK_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
@@ -52,10 +51,6 @@ set_target_properties(gamemenu PROPERTIES
     MACOSX_FRAMEWORK_SHORT_VERSION_STRING ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
     MACOSX_FRAMEWORK_BUNDLE_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
     PUBLIC_HEADER "${GMENU_HEADERS}")
-
-add_custom_command(TARGET gamemenu POST_BUILD COMMAND cp -r
-    ${PROJECT_SOURCE_DIR}/include/GameMenu/GameMenu.h
-    $<TARGET_FILE_DIR:gamemenu>/Headers)
 
 if(WIN32)
     add_custom_command(
@@ -69,19 +64,14 @@ endif()
 
 add_executable(example 
 "examples/sample_menu.cpp"
-"include/GameMenu/GameMenu.h"
 )
 
 target_link_libraries(example PRIVATE gamemenu)
-# target_include_directories(
-#     example
-#     PRIVATE
-#     "public"
-#     "include"
-# )
 
 add_custom_target(copy_example_font
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/Examples/sansation.ttf ${CMAKE_BINARY_DIR}
 )
 
 add_dependencies(example copy_example_font)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

@@ -1,60 +1,70 @@
 /*
     Copyright (c) 2023 Sidhin S Thomas. All rights reserved
 */
+#include "SFML/Graphics/RenderTarget.hpp"
+#include <SFML/Graphics.hpp>
 
-#include <_types/_uint32_t.h>
 #include <functional>
 #include <string>
 
 namespace game_menu {
 
-    typedef uint8_t Color;
+typedef struct __menu_context MENU;
 
-    enum Align {
-        Left = 0,
-        Center = 1,
-        Right = 2
-    };
+typedef uint32_t Color;
 
-    struct MenuItem {
-        std::function<bool()> action;
-        std::string title;
-    };
+enum Align { Left = 0, Center = 1, Right = 2 };
 
-    struct ColorScheme {
-        Color TitleColor;
-        Color ItemColor;
-        Color SelectedColor;
-    };
+struct MenuItem {
+  std::string name;
+  std::function<void(sf::RenderTarget &)> action;
+};
 
-    struct Padding {
-        int top;
-        int left;
-        int bottom;
-        int right;
-    };
+struct ColorScheme {
+  Color TitleColor;
+  Color ItemColor;
+  Color SelectedColor;
+};
 
-    template<typename FontType>
-    struct Style {
-        FontType &TitleFont;
-        FontType &ItemFont;
+struct Padding {
+  int top;
+  int left;
+  int bottom;
+  int right;
+};
 
-        uint32_t TitleFontSize;
-        uint32_t ItemFontSize;
+struct Style {
+  sf::Font *TitleFont;
+  sf::Font *ItemFont;
 
-        float MenuTitleScaleFactor;
-        float MenuItemScaleFactor;
+  uint32_t TitleFontSize;
+  uint32_t ItemFontSize;
 
-        ColorScheme ColorScheme;
+  float MenuTitleScaleFactor;
+  float MenuItemScaleFactor;
 
-        Padding PaddingTitle;
-        Padding PaddingItems;
+  ColorScheme ColorScheme;
 
-        Align TitleAlign;
-        Align ItemAlign;
-    
-    };
+  Padding PaddingTitle;
+  Padding PaddingItems;
 
+  Align TitleAlign;
+  Align ItemAlign;
+};
 
+struct MenuConfig {
+  std::string title;
+  std::vector<MenuItem> items;
+  Style style;
+};
 
 } // namespace game_menu
+
+extern "C" {
+
+game_menu::MENU* create_menu_context(sf::RenderWindow &wnd, game_menu::MenuConfig &config);
+void menu_destroy_context(game_menu::MENU* menu);
+void menu_handle_event(game_menu::MENU* menu, sf::Event &event);
+void menu_render(game_menu::MENU* menu);
+
+}
