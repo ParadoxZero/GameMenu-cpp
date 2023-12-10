@@ -1,5 +1,5 @@
-#include "GameMenu\GameMenu.h"
-#include <SFML\Graphics.hpp>
+#include <GameMenu/GameMenu.h>
+#include <SFML/Graphics.hpp>
 #include <memory>
 
 namespace test {
@@ -11,7 +11,7 @@ namespace test {
 	};
 }
 
-void main() {
+int main() {
 	sf::RenderWindow w( sf::VideoMode( 800, 600 ), "Sample Title", sf::Style::Close);
 	std::vector<gmenu::MenuItem> itemList;
 	std::string text[4] = { "Option1", "Option2","Option3", "Option4" };
@@ -33,5 +33,6 @@ void main() {
 	}
 	gmenu::Menu menu( w, "Sample Menu", itemList, style );
 	menu.createMenu();
+	return 0;
 }
 
