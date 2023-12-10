@@ -14,51 +14,55 @@ The main purpose of the library is to make creation of menu's in games easy. Thi
 #### To use the library
   
   * First Need to decide the menu items, ie the options available (eg Start, Exit, Highscore etc)
-  * Create A vector of `gmenu::MenuItem`. Which contains the title of the item and Action it will perform.
-  
-  The definition of `gmenu::MenuItem` is:
+  * Create A vector of `game_menu::MenuItem`. Which contains the title of the item and Action it will perform.
     
-    ```cpp
-       struct MenuItem {
-           std::shared_ptr<Action> action;
-           std::string title;
-       };
-    ```
-    
-     Here `gmenu::Action` is an abstract Class that acts as an interface.
-     The virtual method `bool DerivedAction::start()` will be called by the Menu when that item is selected.
-    
- 
-* Now create a style. `gmenu::Style`
+  * Now create a style. `gmenu::Style`
      * It requires two paramenters ( `sf::Font` ) to initialize.
      * `gmenu::Style` can be used to define the look of the menu.
      
      ```cpp
-      sf::Font &TitleFont;
-      sf::Font &ItemFont;
-
-      sf::Color TitleColor = sf::Color::Green;;
-      sf::Color ItemColor = sf::Color::Red ;
-      sf::Color Selected = sf::Color::Blue; 
-
-      unsigned int TitleFontSize = 50;
-      unsigned int ItemFontSize = 20;
-      
-      float MenuItemScaleFactor = 0.25; // This determines the distance between options. 
-      
-      int layout = Layout::Default; // Bitflag, Defines the layout of menu. eg. Layout::ItemLeft| Layout::TitleCentre
-
-      struct {
-       signed int top, left;
-      } PaddingTitle, PaddingItems; // this is the padding that will extra displacement that will always be added.
+      game_menu::Style style {
+          .ItemFont = &font,
+          .TitleFont = &font,
+          .TitleFontSize = 36,
+          .ItemFontSize = 24,
+          .MenuTitleScaleFactor = 1,
+          .MenuItemScaleFactor = 1.5,
+          .ColorScheme = {
+            .TitleColor = 0xFFFFFF,
+            .ItemColor = 0xFFFFFF,
+            .SelectedColor = 0xFF22F1
+          },
+          .PaddingTitle = {
+            .top = 100,
+            .left = 0,
+          },
+          .PaddingItems = {
+            .top = 40,
+          },
+          .TitleAlign = game_menu::Align::Center,
+          .ItemAlign = game_menu::Align::Center
+        };
      ```
      
-* Now create an object of `gmenuMenu` which require the following parameters:
-  * `sf::RenderWindow` : Where menu is to be created
-  * `std::vector<gmenu::MenuItem>` : Vector containing MenuItems.
-  * `gmenu::Style`: That defines the style.
+  * Now create an context of `Menu`:
+    ```cpp
+    auto menu_ptr = create_menu_context(w, config);
+	  std::unique_ptr<game_menu::MENU, decltype(&menu_destroy_context)> menu(menu_ptr, &menu_destroy_context);
+    ```
  
-* Vola, your menu is ready to be used.
+* Now integrate the event handling and render into the event loop - 
+```cpp
+    while (w.pollEvent(event)) {
+			if (event.type == sf::Event::Closed) {
+				is_exit_requested = true;
+			}
+			menu_handle_event(menu.get(), event);
+		}
+		w.clear();
+		menu_render(menu.get());
+		w.display();
+```
      
 
 ## [Screenshots!](Screenshots.md)
@@ -67,7 +71,18 @@ The main purpose of the library is to make creation of menu's in games easy. Thi
   * [Simple and Fast Multimedia Library](http://www.sfml-dev.org/index.php)
       
 ## Installing
-> TODO 
+Install via cmake's FetchContent script - 
+```cmake
+FetchContent_Declare(game_menu
+    GIT_REPOSITORY https://github.com/ParadoxZero/GameMenu-cpp.git
+    GIT_TAG <commit hash>
+    GIT_SHALLOW TRUE
+)
+
+FetchContent_MakeAvailable(game_menu)
+
+target_link_libraries(mygame PRIVATE game_menu)
+```
  
 ## Contributions
 If you are looking to contribute, then feel free to create a pull request.
