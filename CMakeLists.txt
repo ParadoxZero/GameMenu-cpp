@@ -85,3 +85,5 @@ add_custom_target(copy_example_font
 )
 
 add_dependencies(example copy_example_font)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

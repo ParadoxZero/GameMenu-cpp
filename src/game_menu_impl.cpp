@@ -1,142 +1,140 @@
-// /*
-// *	Copyright (C) 2016 Sidhin S Thomas
-// *
-// *	This software is licensed under the MIT License
-// */
+/*
 
-// #include <GameMenu/GameMenu.h>
-// #include <iostream>
-// namespace gmenu {
+*/
 
+#include "game_menu_impl.h"
+#include "SFML/Graphics/Color.hpp"
+#include "SFML/Window/Event.hpp"
 
-// 	/*==================================================*
-// 	*				public functions					*
-// 	*===================================================*/
+#include <string>
 
-// 	void Menu::setTitle(std::string title) {
-// 		menuTitle = title;
-// 	}
+game_menu::MENU create_menu_context(sf::RenderWindow &wnd,
+                                    game_menu::MenuConfig &config) {
+  return reinterpret_cast<game_menu::MENU>(new game_menu::Menu(wnd, config));
+}
 
-// 	void Menu::setMenuItems( std::vector<MenuItem> items ) {
-// 		menuItems = items;
-// 	}
+void destroy_menu_context(game_menu::MENU menu) {
+  delete reinterpret_cast<game_menu::Menu *>(menu);
+}
 
+void handle_event(game_menu::MENU menu, sf::Event &event) {
+  reinterpret_cast<game_menu::Menu *>(menu)->handleEvent(event);
+}
 
-// 	/* 
-// 	This function constains the main event loop for the menu
-// 	The actions performed : drawMenu() -> pollEvent() -> prefromAction()
-// 	*/
-// 	void Menu::createMenu() {
-// 		setMenu();
-// 		bool cont = true;
-// 		while (window.isOpen() && cont)
-// 		{	
-// 			sf::Event event;
-// 			while (window.pollEvent(event)) {
-// 				if (event.type == sf::Event::Closed)
-// 					window.close();
-// 				else if (event.type == sf::Event::KeyPressed) {
-// 					if (event.key.code == sf::Keyboard::Up) {
-// 						currently_selected_item = (currently_selected_item + menuItems.size() - 1) % (menuItems.size());
-// 					}
-// 					else if (event.key.code == sf::Keyboard::Down) {
-// 						currently_selected_item = (currently_selected_item + 1) % (menuItems.size());
-// 					}
-// 					else if (event.key.code == sf::Keyboard::Return) {
-// 						cont = menuItems.at(currently_selected_item).action->start();
-// 					}
-// 				}
-// 			} // while( pollEvent )
-			
-// 			window.clear();
-// 			drawMenu();
-// 			window.display();
-// 		} // while window open	
-// 	} //create menu
+namespace game_menu {
 
+void Menu::handleEvent(sf::Event &event) {
+  auto max_items = _items.size();
+  if (event.type == sf::Event::KeyPressed) {
+    if (event.key.code == sf::Keyboard::Up) {
+      _currently_selected_item =
+          (_currently_selected_item + max_items - 1) % max_items;
+    } else if (event.key.code == sf::Keyboard::Down) {
+      _currently_selected_item = (_currently_selected_item + 1) % max_items;
+    } else if (event.key.code == sf::Keyboard::Return) {
+      _items[_currently_selected_item].item_data.action(_window);
+    }
+  }
+  setMenu();
+  drawMenu();
+}
 
+void Menu::writeText(std::string str, sf::Font *font, unsigned int size,
+                     float x, float y, const Color color) {
+  sf::Color textColor(color);
+  sf::Text text;
+  text.setString(str);
+  text.setFont(*font);
+  text.setFillColor(textColor);
+  text.setCharacterSize(size);
+  sf::FloatRect textRect = text.getLocalBounds();
+  text.setOrigin(textRect.width / 2.0f, 0);
+  if (x - textRect.width / 2.0f < 0) {
+    // std::cout << x << " " << textRect.width / 2.0f;
+    x = textRect.width / 2 + _style.PaddingTitle.left;
+  }
+  if (x + textRect.width / 2.0f > _window.getSize().x) {
+    // std::cout << x << " " << textRect.width / 2.0f;
+    x = _window.getSize().x - textRect.width / 2 + _style.PaddingTitle.left;
+  }
+  text.setPosition(sf::Vector2f(x, y));
+  _window.draw(text);
+} // writeText(...)
 
-// 	/*==================================================*
-// 	*				Private Functions					*
-// 	*===================================================*/
+void Menu::setMenu() {
 
+  //   std::cout << "screen size:" << window.getSize().x << " " <<
+  //   window.getSize().y
+  //             << std::endl;
 
-// 	/* Utility function */
-// 	void Menu::writeText(std::string str, sf::Font font, unsigned int size, float x, float y, const sf::Color &color) {
-// 		sf::Text text;
-// 		text.setString(str);
-// 		text.setFont(font);
-// 		text.setFillColor(color);
-// 		text.setCharacterSize(size);
-// 		sf::FloatRect textRect = text.getLocalBounds();
-// 		text.setOrigin(textRect.width / 2.0f,0);
-// 		if ( x - textRect.width / 2.0f < 0 ) {
-// 			//std::cout << x << " " << textRect.width / 2.0f;
-// 			x = textRect.width / 2 + style.PaddingTitle.left;
-// 		}
-// 		if ( x + textRect.width / 2.0f > window.getSize().x ) {
-// 			//std::cout << x << " " << textRect.width / 2.0f;
-// 			x = window.getSize().x - textRect.width/2 + style.PaddingTitle.left;
-// 		}
-// 		text.setPosition(sf::Vector2f(x,y));
-// 		window.draw(text);
-// 	} //writeText(...)
+  /* Setting title of menu */
+  {
+    /* Small scope just to be able to freely use the variable names */
+    float offset_coefficient = 0.5;
 
-// 	void Menu::setMenu() {
+    switch (_style.TitleAlign) {
+    case Align::Center:
+      offset_coefficient = 0.5;
+      break;
+    case Align::Left:
+      offset_coefficient = 0.25;
+      break;
+    case Align::Right:
+      offset_coefficient = 0.75;
+      break;
+    }
+    float x = (float)_window.getSize().x * offset_coefficient,
+          y = _style.PaddingTitle.top;
+    _title_location.x = (x + _style.PaddingTitle.left);
+    _title_location.y = y;
+  }
 
-// 		std::cout << "screen size:" << window.getSize().x << " " << window.getSize().y << std::endl;
+  float menu_screen_height =
+      _window.getSize().y - _title_location.y + _style.PaddingItems.top;
+  float block_height =
+      (float)menu_screen_height / _items.size() * _style.MenuItemScaleFactor;
 
-// 		/* Setting title of menu */
-// 		{
-// 			/* Small scope just to be able to freely use the variable names */
-// 			float offset_coefficient = 0.5;
-// 			if ( style.layout & Layout::TitleCentre ) offset_coefficient = 0.5;
-// 			else if ( style.layout & Layout::TitleLeft ) offset_coefficient = 0.25;
-// 			else if ( style.layout & Layout::TitleRight ) offset_coefficient = 0.75;
-// 			float x = (float) window.getSize().x * offset_coefficient, y = style.PaddingTitle.top;
-// 			title_location.x = (x + style.PaddingTitle.left);
-// 			title_location.y = y;
-// 			std::cout << "title_location:" << title_location.x << " "<<title_location.y<<offset_coefficient<<std::endl;
-// 		}
+  float offset_coefficient = 0.5;
+  switch (_style.ItemAlign) {
+  case Align::Center:
+    offset_coefficient = 0.5;
+    break;
+  case Align::Left:
+    offset_coefficient = 0.25;
+    break;
+  case Align::Right:
+    offset_coefficient = 0.75;
+    break;
+  }
 
-// 		unsigned int menu_screen_height =(int) window.getSize().y  -  title_location.y + style.PaddingItems.top ;
-// 		std::cout << "Screen hieght" << menu_screen_height << std::endl;
-// 		unsigned int block_height = (int) menu_screen_height/menuItems.size() * style.MenuItemScaleFactor;
-		
-// 		float offset_coefficient = 0.5;
-// 		if ( style.layout & Layout::ItemCentre  ) offset_coefficient = 0.5;
-// 		else if ( style.layout & Layout::ItemLeft ) offset_coefficient = 0.25;
-// 		else if ( style.layout & Layout::ItemRight ) offset_coefficient = 0.75;
+  float x = (float)_window.getSize().x * offset_coefficient +
+            _style.PaddingItems.left;
+  float y = ((float)_window.getSize().y) - 0.75 * menu_screen_height +
+            block_height * 1 / 8;
+  /* Calculating Menu item locations */
+  for (int8_t i = 0; i < _items.size(); ++i) {
+    coordinates crd;
+    crd.x = x;
+    crd.y = y;
+    _items[i].location = crd;
+    y += block_height;
+  }
 
-// 		float x = (float)window.getSize().x * offset_coefficient + style.PaddingItems.left;
-// 		float y = ((float)window.getSize().y) - 0.75 * menu_screen_height + block_height * 1 / 8;
-// 		/* Calculating Menu item locations */
-// 		for (int8_t i = 0; i < menuItems.size(); ++i) {
-// 			coordinates crd ;
-// 			crd.x = x;
-// 			crd.y = y;
-// 			item_location.push_back( crd );
-// 			std::cout << "menu location:" << x << " " << y <<offset_coefficient<< std::endl;
-// 			y += block_height;
+} // setMenu()
 
-// 		}
-		
-// 	} //setMenu()
+void Menu::drawMenu() {
+  writeText(_title, _style.ItemFont, _style.TitleFontSize, _title_location.x,
+            _title_location.y, _style.ColorScheme.TitleColor);
+  game_menu::Color color(_style.ColorScheme.ItemColor);
+  for (int i = 0; i < _items.size(); ++i) {
+    if (i == _currently_selected_item) {
+      color = _style.ColorScheme.SelectedColor;
+    }
+    writeText(_items[i].item_data.name, _style.ItemFont, _style.ItemFontSize,
+              _items[i].location.x, _items[i].location.y, color);
+    color = _style.ColorScheme.ItemColor;
+  }
 
-// 	void Menu::drawMenu() {
-// 		writeText(menuTitle, style.ItemFont, style.TitleFontSize, title_location.x, title_location.y, style.TitleColor);
-// 		sf::Color color = style.ItemColor;
-// 		for (int i = 0; i < menuItems.size(); ++i)
-// 		{
-// 			if (i == currently_selected_item) {
-// 				color = style.Selected;
-// 			}
-// 			writeText( menuItems[i].title, style.ItemFont, style.ItemFontSize, item_location[i].x, item_location[i].y, color);
-// 			color = style.ItemColor;
-// 		}
+} // drawMenu()
 
-// 	} //drawMenu()
-
-
-
-// } // namespace sui
+} // namespace game_menu
