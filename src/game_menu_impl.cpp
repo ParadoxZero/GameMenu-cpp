@@ -1,7 +1,3 @@
-/*
-
-*/
-
 #include "game_menu_impl.h"
 #include "SFML/Graphics/Color.hpp"
 #include "SFML/Window/Event.hpp"
