@@ -35,8 +35,6 @@ FetchContent_MakeAvailable(SFML)
 
 set(SOURCES 
     "include/GameMenu/GameMenu.h"
-    "public/game_menu/game_menu.h"
-    "src/game_menu_impl.cpp"
     "src/GameMenu/GameMenu.cpp"
 )
 
