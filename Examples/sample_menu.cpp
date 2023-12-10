@@ -12,21 +12,24 @@ int main() {
 	game_menu::Style style {
 		.ItemFont = &font,
 		.TitleFont = &font,
-		.TitleFontSize = 16,
-		.ItemFontSize = 8,
+		.TitleFontSize = 36,
+		.ItemFontSize = 24,
 		.MenuTitleScaleFactor = 1,
-		.MenuItemScaleFactor = 1,
+		.MenuItemScaleFactor = 1.5,
 		.ColorScheme = {
 			.TitleColor = 0xFFFFFF,
 			.ItemColor = 0xFFFFFF,
 			.SelectedColor = 0xFF22F1
 		},
 		.PaddingTitle = {
-			.top = 0,
-			.left = 10,
+			.top = 100,
+			.left = 0,
 		},
-		.TitleAlign = game_menu::Align::Left,
-		.ItemAlign = game_menu::Align::Left
+		.PaddingItems = {
+			.top = 40,
+		},
+		.TitleAlign = game_menu::Align::Center,
+		.ItemAlign = game_menu::Align::Center
 	};
 
 	bool is_exit_requested = false;
@@ -40,7 +43,7 @@ int main() {
 	};
 
 	game_menu::MenuConfig config {
-		.title = "Sample Title",
+		.title = "My Game",
 		.items = items,
 		.style = style
 	};

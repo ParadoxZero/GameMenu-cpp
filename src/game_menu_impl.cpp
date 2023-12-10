@@ -89,16 +89,16 @@ void Menu::setMenu() {
       offset_coefficient = 0.75;
       break;
     }
-    float x = (float)_window.getSize().x * offset_coefficient,
+    float x = (float)_window.getSize().x * offset_coefficient ,
           y = _style.PaddingTitle.top;
     _title_location.x = (x + _style.PaddingTitle.left);
     _title_location.y = y;
   }
 
   float menu_screen_height =
-      _window.getSize().y - _title_location.y + _style.PaddingItems.top;
+      _title_location.y + _style.PaddingItems.top;
   float block_height =
-      (float)menu_screen_height / _items.size() * _style.MenuItemScaleFactor;
+      (float)_style.ItemFontSize * _style.MenuItemScaleFactor;
 
   float offset_coefficient = 0.5;
 
@@ -116,8 +116,8 @@ void Menu::setMenu() {
 
   float x = (float)_window.getSize().x * offset_coefficient +
             _style.PaddingItems.left;
-  float y = ((float)_window.getSize().y) - 0.75 * menu_screen_height +
-            block_height * 1 / 8;
+  float y = menu_screen_height +
+            block_height + _style.PaddingItems.top;
   /* Calculating Menu item locations */
   for (int8_t i = 0; i < _items.size(); ++i) {
     coordinates crd;
