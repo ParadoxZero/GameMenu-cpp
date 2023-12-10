@@ -1,12 +1,11 @@
 cmake_minimum_required(VERSION 3.20)
 project(gamemenu)
 
-set(MAJOR_VERSION 2)
-set(MINOR_VERSION 0)
-set(PATCH_VERSION 0)
+set(VERSION_MAJOR 2)
+set(VERSION_MINOR 0)
+set(VERSION_PATCH 0)
 
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_OSX_ARCHITECTURES "arm64")
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wno-error=unused-command-line-argument")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wno-error=unused-command-line-argument")
@@ -16,18 +15,12 @@ if (NOT DEFINED LINK_TYPE)
     set(LINK_TYPE STATIC)
 endif()
 
-# set(SFML_STATIC_LIBRARIES TRUE)
-
-# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
-
 include(FetchContent)
 
 FetchContent_Declare(SFML
     GIT_REPOSITORY https://github.com/SFML/SFML.git
     GIT_TAG 11b73743c42cf7ecd7c596ba83fdbf1150ffa96c
     GIT_SHALLOW TRUE
-    # SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/sfml
 )
 
 FetchContent_MakeAvailable(SFML)
@@ -36,6 +29,7 @@ FetchContent_MakeAvailable(SFML)
 set(SOURCES 
     "public/game_menu/game_menu.h"
     "src/game_menu_impl.cpp"
+    "src/GameMenu/GameMenu.cpp"
 )
 
 add_library(gamemenu ${LINK_TYPE} ${SOURCES})
@@ -46,6 +40,22 @@ target_include_directories(
     "public"
     "include"
 )
+
+set(GMENU_HEADERS
+    "public/game_menu/game_menu.h"
+    "include/GameMenu/GameMenu.h"
+)
+set_target_properties(gamemenu PROPERTIES
+    FRAMEWORK TRUE
+    FRAMEWORK_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
+    MACOSX_FRAMEWORK_IDENTIFIER in.sidhin.gamemenu
+    MACOSX_FRAMEWORK_SHORT_VERSION_STRING ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
+    MACOSX_FRAMEWORK_BUNDLE_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
+    PUBLIC_HEADER "${GMENU_HEADERS}")
+
+add_custom_command(TARGET gamemenu POST_BUILD COMMAND cp -r
+    ${PROJECT_SOURCE_DIR}/include/GameMenu/GameMenu.h
+    $<TARGET_FILE_DIR:gamemenu>/Headers)
 
 if(WIN32)
     add_custom_command(
@@ -61,13 +71,14 @@ add_executable(example
 "examples/sample_menu.cpp"
 "include/GameMenu/GameMenu.h"
 )
+
 target_link_libraries(example PRIVATE gamemenu)
-target_include_directories(
-    example
-    PRIVATE
-    "public"
-    "include"
-)
+# target_include_directories(
+#     example
+#     PRIVATE
+#     "public"
+#     "include"
+# )
 
 add_custom_target(copy_example_font
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/Examples/sansation.ttf ${CMAKE_BINARY_DIR}
