@@ -60,18 +60,15 @@ if(WIN32)
         VERBATIM)
 endif()
 
-
-
-add_executable(example 
-"examples/sample_menu.cpp"
-)
-
-target_link_libraries(example PRIVATE gamemenu)
-
-add_custom_target(copy_example_font
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/Examples/sansation.ttf ${CMAKE_BINARY_DIR}
-)
-
-add_dependencies(example copy_example_font)
+if(BUILD_WITH_EXAMPLE)
+    add_executable(example 
+        "examples/sample_menu.cpp"
+    )
+    target_link_libraries(example PRIVATE gamemenu)
+    add_custom_target(copy_example_font
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/Examples/sansation.ttf ${CMAKE_BINARY_DIR}
+    )
+    add_dependencies(example copy_example_font)
+endif()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
