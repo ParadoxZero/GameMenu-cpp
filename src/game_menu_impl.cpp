@@ -127,13 +127,13 @@ void Menu::setMenu() {
 
 void Menu::drawMenu() {
   writeText(_title, _style.ItemFont, _style.TitleFontSize, _title_location.x,
-            _title_location.y, _style.ColorScheme.TitleColor);
-  game_menu::Color color(_style.ColorScheme.ItemColor);
+            _title_location.y, _style.colorScheme.titleColor);
+  game_menu::Color color(_style.colorScheme.itemColor);
   for (int i = 0; i < _items.size(); ++i) {
     if (i == _currently_selected_item) {
-      color = _style.ColorScheme.SelectedColor;
+      color = _style.colorScheme.selectedColor;
     } else {
-      color = _style.ColorScheme.ItemColor;
+      color = _style.colorScheme.itemColor;
     }
     writeText(_items[i].data.name, _style.ItemFont, _style.ItemFontSize,
               _items[i].location.x, _items[i].location.y, color);

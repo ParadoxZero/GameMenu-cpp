@@ -21,9 +21,9 @@ struct MenuItem {
 };
 
 struct ColorScheme {
-  Color TitleColor;
-  Color ItemColor;
-  Color SelectedColor;
+  Color titleColor;
+  Color itemColor;
+  Color selectedColor;
 };
 
 struct Padding {
@@ -43,7 +43,7 @@ struct Style {
   float MenuTitleScaleFactor;
   float MenuItemScaleFactor;
 
-  ColorScheme ColorScheme;
+  ColorScheme colorScheme;
 
   Padding PaddingTitle;
   Padding PaddingItems;

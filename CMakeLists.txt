@@ -7,9 +7,6 @@ set(VERSION_PATCH 0)
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wno-error=unused-command-line-argument")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wno-error=unused-command-line-argument")
-
 if (NOT DEFINED LINK_TYPE)
     message("Library link type not specified, using default - STATIC")
     set(LINK_TYPE STATIC)
@@ -60,13 +57,15 @@ if(WIN32)
         VERBATIM)
 endif()
 
+SET(BUILD_WITH_EXAMPLE OFF CACHE BOOL "Build attached example")
+
 if(BUILD_WITH_EXAMPLE)
     add_executable(example 
         "examples/sample_menu.cpp"
     )
     target_link_libraries(example PRIVATE gamemenu)
     add_custom_target(copy_example_font
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/Examples/sansation.ttf ${CMAKE_BINARY_DIR}
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/examples/sansation.ttf ${CMAKE_BINARY_DIR}
     )
     add_dependencies(example copy_example_font)
 endif()
