@@ -101,10 +101,10 @@ namespace game_menu
 
 		float titleX = (float)_window.getSize().x * titleOffsetCoefficient;
 		float titleY = _style.PaddingTitle.top;
-		_title_location.x = (titleX + _style.PaddingTitle.left);
-		_title_location.y = titleY;
+		_title_location.X = (titleX + _style.PaddingTitle.left);
+		_title_location.Y = titleY;
 
-		float menu_screen_height = _title_location.y + _style.PaddingItems.top;
+		float menu_screen_height = _title_location.Y + _style.PaddingItems.top;
 		float block_height = (float)_style.ItemFontSize * _style.MenuItemScaleFactor;
 		float offset_coefficient = GetOffsetCoefficient(_style.ItemAlign);
 
@@ -114,21 +114,21 @@ namespace game_menu
 		/* Calculating Menu item locations */
 		for (auto i = 0; i < _items.size(); ++i)
 		{
-			_items[i].location.x = x;
-			_items[i].location.y = x;
+			_items[i].location.X = x;
+			_items[i].location.Y = x;
 			y += block_height;
 		}
 	}
 
 	void Menu::drawMenu() 
 	{
-		writeText(_title, _style.ItemFont, _style.TitleFontSize, _title_location.x, _title_location.y, _style.colorScheme.titleColor);
+		writeText(_title, _style.ItemFont, _style.TitleFontSize, _title_location.X, _title_location.Y, _style.colorScheme.titleColor);
 		game_menu::Color color(_style.colorScheme.itemColor);
 
 		for (auto i = 0; i < _items.size(); ++i)
 		{
 			color = i == _currently_selected_item ? _style.colorScheme.selectedColor : color = _style.colorScheme.itemColor;
-			writeText(_items[i].data.name, _style.ItemFont, _style.ItemFontSize,_items[i].location.x, _items[i].location.y, color);
+			writeText(_items[i].data.name, _style.ItemFont, _style.ItemFontSize,_items[i].location.X, _items[i].location.Y, color);
 		}
 	}
 }

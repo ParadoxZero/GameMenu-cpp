@@ -14,8 +14,8 @@ namespace game_menu
 {
 	struct Coordinates
 	{
-		float x = 0;
-		float y = 0;
+		float X = 0;
+		float Y = 0;
 	};
 
 	struct Item
