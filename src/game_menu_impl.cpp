@@ -28,6 +28,21 @@ void menu_render(game_menu::MENU* menu)
 
 namespace game_menu 
 {
+	static float GetOffsetCoefficient(const Align& alignment)
+	{
+		switch (alignment)
+		{
+		case Align::Left:
+			return 0.25f;
+		case Align::Right:
+			return 0.75f;
+		case Align::Center:
+		default:
+			// Center is the default alignment if unknown.
+			return 0.5f;
+		}
+	}
+
 	void Menu::handleEvent(sf::Event& event)
 	{
 		auto max_items = _items.size();
@@ -84,20 +99,7 @@ namespace game_menu
 		/* Setting title of menu */
 		{
 			/* Small scope just to be able to freely use the variable names */
-			float offset_coefficient = 0.5;
-
-			switch (_style.TitleAlign)
-			{
-			case Align::Center:
-				offset_coefficient = 0.5;
-				break;
-			case Align::Left:
-				offset_coefficient = 0.25;
-				break;
-			case Align::Right:
-				offset_coefficient = 0.75;
-				break;
-			}
+			const auto offset_coefficient = GetOffsetCoefficient(_style.TitleAlign);
 
 			float x = (float)_window.getSize().x * offset_coefficient, y = _style.PaddingTitle.top;
 			_title_location.x = (x + _style.PaddingTitle.left);
@@ -106,30 +108,16 @@ namespace game_menu
 
 		float menu_screen_height = _title_location.y + _style.PaddingItems.top;
 		float block_height = (float)_style.ItemFontSize * _style.MenuItemScaleFactor;
-		float offset_coefficient = 0.5;
+		float offset_coefficient = GetOffsetCoefficient(_style.ItemAlign);
 
-		switch (_style.ItemAlign) 
-		{
-		case Align::Center:
-			offset_coefficient = 0.5;
-			break;
-		case Align::Left:
-			offset_coefficient = 0.25;
-			break;
-		case Align::Right:
-			offset_coefficient = 0.75;
-			break;
-		}
+		const auto x = (float)_window.getSize().x * offset_coefficient + _style.PaddingItems.left;
+		auto y = menu_screen_height + block_height + _style.PaddingItems.top;
 
-		float x = (float)_window.getSize().x * offset_coefficient + _style.PaddingItems.left;
-		float y = menu_screen_height + block_height + _style.PaddingItems.top;
 		/* Calculating Menu item locations */
-		for (int8_t i = 0; i < _items.size(); ++i)
+		for (auto i = 0; i < _items.size(); ++i)
 		{
-			coordinates crd;
-			crd.x = x;
-			crd.y = y;
-			_items[i].location = crd;
+			_items[i].location.x = x;
+			_items[i].location.y = x;
 			y += block_height;
 		}
 	}
@@ -139,17 +127,9 @@ namespace game_menu
 		writeText(_title, _style.ItemFont, _style.TitleFontSize, _title_location.x, _title_location.y, _style.colorScheme.titleColor);
 		game_menu::Color color(_style.colorScheme.itemColor);
 
-		for (int i = 0; i < _items.size(); ++i)
+		for (auto i = 0; i < _items.size(); ++i)
 		{
-			if (i == _currently_selected_item)
-			{
-				color = _style.colorScheme.selectedColor;
-			}
-			else
-			{
-				color = _style.colorScheme.itemColor;
-			}
-
+			color = i == _currently_selected_item ? _style.colorScheme.selectedColor : color = _style.colorScheme.itemColor;
 			writeText(_items[i].data.name, _style.ItemFont, _style.ItemFontSize,_items[i].location.x, _items[i].location.y, color);
 		}
 	}
