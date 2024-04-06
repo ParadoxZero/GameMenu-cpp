@@ -41,19 +41,19 @@ namespace game_menu
 			std::cout << "Size of items : " << _items.size() << std::endl;
 		}
 
-		void handleEvent(sf::Event& event);
-		void render();
+		void HandleEvent(sf::Event& event);
+		void Render();
 
 	private:
-		void setMenu();
-		void drawMenu();
-		void writeText(std::string str, sf::Font* font, unsigned int size, float x, float y, const Color color);
+		void SetMenu();
+		void DrawMenu();
+		void WriteText(std::string str, sf::Font* font, unsigned int size, float x, float y, const Color color);
 
 		sf::RenderTarget& _window;
 		Style _style;
 		std::string _title;
 		std::vector<Item> _items;
-		Coordinates _title_location;
-		int _currently_selected_item = 0;
+		Coordinates _titleLocation;
+		int _currentlySelectedItem = 0;
 	};
 }

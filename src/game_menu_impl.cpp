@@ -18,12 +18,12 @@ void menu_destroy_context(game_menu::MENU* menu)
 
 void menu_handle_event(game_menu::MENU* menu, sf::Event& event)
 {
-	reinterpret_cast<game_menu::Menu*>(menu)->handleEvent(event);
+	reinterpret_cast<game_menu::Menu*>(menu)->HandleEvent(event);
 }
 
 void menu_render(game_menu::MENU* menu)
 {
-	reinterpret_cast<game_menu::Menu*>(menu)->render();
+	reinterpret_cast<game_menu::Menu*>(menu)->Render();
 }
 
 namespace game_menu 
@@ -43,33 +43,33 @@ namespace game_menu
 		}
 	}
 
-	void Menu::handleEvent(sf::Event& event)
+	void Menu::HandleEvent(sf::Event& event)
 	{
-		auto max_items = _items.size();
+		const auto itemCount = _items.size();
 		if (event.type == sf::Event::KeyPressed) 
 		{
 			if (event.key.code == sf::Keyboard::Up) 
 			{
-				_currently_selected_item = (_currently_selected_item + max_items - 1) % max_items;
+				_currentlySelectedItem = (_currentlySelectedItem + itemCount - 1) % itemCount;
 			}
 			else if (event.key.code == sf::Keyboard::Down) 
 			{
-				_currently_selected_item = (_currently_selected_item + 1) % max_items;
+				_currentlySelectedItem = (_currentlySelectedItem + 1) % itemCount;
 			}
 			else if (event.key.code == sf::Keyboard::Return) 
 			{
-				_items[_currently_selected_item].Data.action(_window);
+				_items[_currentlySelectedItem].Data.action(_window);
 			}
 		}
 	}
 
-	void Menu::render()
+	void Menu::Render()
 	{
-		setMenu();
-		drawMenu();
+		SetMenu();
+		DrawMenu();
 	}
 
-	void Menu::writeText(std::string str, sf::Font* font, unsigned int size, float x, float y, const Color color)
+	void Menu::WriteText(std::string str, sf::Font* font, unsigned int size, float x, float y, const Color color)
 	{
 		sf::Color textColor(color);
 		sf::Text text;
@@ -94,41 +94,41 @@ namespace game_menu
 		_window.draw(text);
 	}
 
-	void Menu::setMenu()
+	void Menu::SetMenu()
 	{
 		/* Setting title of menu */
 		const auto titleOffsetCoefficient = GetOffsetCoefficient(_style.TitleAlign);
 
 		float titleX = (float)_window.getSize().x * titleOffsetCoefficient;
 		float titleY = _style.PaddingTitle.top;
-		_title_location.X = (titleX + _style.PaddingTitle.left);
-		_title_location.Y = titleY;
+		_titleLocation.X = (titleX + _style.PaddingTitle.left);
+		_titleLocation.Y = titleY;
 
-		float menu_screen_height = _title_location.Y + _style.PaddingItems.top;
-		float block_height = (float)_style.ItemFontSize * _style.MenuItemScaleFactor;
-		float offset_coefficient = GetOffsetCoefficient(_style.ItemAlign);
+		float menuScreenHeight = _titleLocation.Y + _style.PaddingItems.top;
+		float blockHeight = (float)_style.ItemFontSize * _style.MenuItemScaleFactor;
+		float offsetCoefficient = GetOffsetCoefficient(_style.ItemAlign);
 
-		const auto x = (float)_window.getSize().x * offset_coefficient + _style.PaddingItems.left;
-		auto y = menu_screen_height + block_height + _style.PaddingItems.top;
+		const auto x = (float)_window.getSize().x * offsetCoefficient + _style.PaddingItems.left;
+		auto y = menuScreenHeight + blockHeight + _style.PaddingItems.top;
 
 		/* Calculating Menu item locations */
 		for (auto i = 0; i < _items.size(); ++i)
 		{
 			_items[i].Location.X = x;
-			_items[i].Location.Y = x;
-			y += block_height;
+			_items[i].Location.Y = y;
+			y += blockHeight;
 		}
 	}
 
-	void Menu::drawMenu() 
+	void Menu::DrawMenu() 
 	{
-		writeText(_title, _style.ItemFont, _style.TitleFontSize, _title_location.X, _title_location.Y, _style.colorScheme.titleColor);
+		WriteText(_title, _style.ItemFont, _style.TitleFontSize, _titleLocation.X, _titleLocation.Y, _style.colorScheme.titleColor);
 		game_menu::Color color(_style.colorScheme.itemColor);
 
 		for (auto i = 0; i < _items.size(); ++i)
 		{
-			color = i == _currently_selected_item ? _style.colorScheme.selectedColor : color = _style.colorScheme.itemColor;
-			writeText(_items[i].Data.name, _style.ItemFont, _style.ItemFontSize,_items[i].Location.X, _items[i].Location.Y, color);
+			color = i == _currentlySelectedItem ? _style.colorScheme.selectedColor : color = _style.colorScheme.itemColor;
+			WriteText(_items[i].Data.name, _style.ItemFont, _style.ItemFontSize,_items[i].Location.X, _items[i].Location.Y, color);
 		}
 	}
 }
