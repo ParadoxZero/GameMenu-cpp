@@ -13,7 +13,7 @@
 
 namespace game_menu
 {
-	struct coordinates
+	struct Coordinates
 	{
 		float x = 0;
 		float y = 0;
@@ -22,7 +22,7 @@ namespace game_menu
 	struct Item
 	{
 		MenuItem data;
-		coordinates location;
+		Coordinates location;
 	};
 
 	class Menu
@@ -52,7 +52,7 @@ namespace game_menu
 		Style _style;
 		std::string _title;
 		std::vector<Item> _items;
-		coordinates _title_location;
+		Coordinates _title_location;
 		int _currently_selected_item = 0;
 	};
 }
