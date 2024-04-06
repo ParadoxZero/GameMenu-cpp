@@ -97,14 +97,12 @@ namespace game_menu
 	void Menu::setMenu()
 	{
 		/* Setting title of menu */
-		{
-			/* Small scope just to be able to freely use the variable names */
-			const auto offset_coefficient = GetOffsetCoefficient(_style.TitleAlign);
+		const auto titleOffsetCoefficient = GetOffsetCoefficient(_style.TitleAlign);
 
-			float x = (float)_window.getSize().x * offset_coefficient, y = _style.PaddingTitle.top;
-			_title_location.x = (x + _style.PaddingTitle.left);
-			_title_location.y = y;
-		}
+		float titleX = (float)_window.getSize().x * titleOffsetCoefficient;
+		float titleY = _style.PaddingTitle.top;
+		_title_location.x = (titleX + _style.PaddingTitle.left);
+		_title_location.y = titleY;
 
 		float menu_screen_height = _title_location.y + _style.PaddingItems.top;
 		float block_height = (float)_style.ItemFontSize * _style.MenuItemScaleFactor;
@@ -133,4 +131,4 @@ namespace game_menu
 			writeText(_items[i].data.name, _style.ItemFont, _style.ItemFontSize,_items[i].location.x, _items[i].location.y, color);
 		}
 	}
-} // namespace game_menu
+}
