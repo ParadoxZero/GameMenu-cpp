@@ -1,14 +1,14 @@
 #pragma once
 
-#include "SFML/Graphics/RenderTarget.hpp"
-#include "SFML/Graphics/RenderWindow.hpp"
-#include "game_menu/game_menu.h"
-
-#include "SFML/Graphics.hpp"
-
+#include <iostream>
 #include <string>
 #include <vector>
-#include <iostream>
+
+#include "SFML/Graphics.hpp"
+#include "SFML/Graphics/RenderTarget.hpp"
+#include "SFML/Graphics/RenderWindow.hpp"
+
+#include "game_menu/game_menu.h"
 
 namespace game_menu
 {
@@ -20,15 +20,17 @@ namespace game_menu
 
 	struct Item
 	{
-		MenuItem data;
-		Coordinates location;
+		MenuItem Data;
+		Coordinates Location;
 	};
 
 	class Menu
 	{
 	public:
 		Menu(sf::RenderTarget& window, MenuConfig config)
-			: _window(window), _style(config.style), _title(config.title)
+			: _window(window)
+			, _style(config.style)
+			, _title(config.title)
 		{
 			for (auto& menu_item : config.items)
 			{

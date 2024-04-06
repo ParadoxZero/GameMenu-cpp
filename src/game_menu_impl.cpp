@@ -58,7 +58,7 @@ namespace game_menu
 			}
 			else if (event.key.code == sf::Keyboard::Return) 
 			{
-				_items[_currently_selected_item].data.action(_window);
+				_items[_currently_selected_item].Data.action(_window);
 			}
 		}
 	}
@@ -114,8 +114,8 @@ namespace game_menu
 		/* Calculating Menu item locations */
 		for (auto i = 0; i < _items.size(); ++i)
 		{
-			_items[i].location.X = x;
-			_items[i].location.Y = x;
+			_items[i].Location.X = x;
+			_items[i].Location.Y = x;
 			y += block_height;
 		}
 	}
@@ -128,7 +128,7 @@ namespace game_menu
 		for (auto i = 0; i < _items.size(); ++i)
 		{
 			color = i == _currently_selected_item ? _style.colorScheme.selectedColor : color = _style.colorScheme.itemColor;
-			writeText(_items[i].data.name, _style.ItemFont, _style.ItemFontSize,_items[i].location.X, _items[i].location.Y, color);
+			writeText(_items[i].Data.name, _style.ItemFont, _style.ItemFontSize,_items[i].Location.X, _items[i].Location.Y, color);
 		}
 	}
 }
