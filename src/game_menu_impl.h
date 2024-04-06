@@ -1,5 +1,4 @@
-#ifndef GMENU_IMPL_H
-#define GMENU_IMPL_H
+#pragma once
 
 #include "SFML/Graphics/RenderTarget.hpp"
 #include "SFML/Graphics/RenderWindow.hpp"
@@ -56,5 +55,3 @@ namespace game_menu
 		int _currently_selected_item = 0;
 	};
 }
-
-#endif // GMENU_IMPL_H
