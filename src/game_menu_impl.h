@@ -22,7 +22,7 @@ namespace game_menu
 	class Menu
 	{
 	public:
-		Menu(sf::RenderTarget& window, MenuConfig config);
+		Menu(sf::RenderTarget& window, const MenuConfig& config);
 
 		void HandleEvent(const sf::Event& event);
 		void Render();
@@ -30,7 +30,7 @@ namespace game_menu
 	private:
 		void SetMenu();
 		void DrawMenu();
-		void WriteText(const std::string& str, const sf::Font& font, const unsigned int& size, const float& x, const float& y, const sf::Color& color);
+		void WriteText(const std::string& str, const sf::Font& font, const float& size, const float& x, const float& y, const sf::Color& color);
 
 		sf::RenderTarget& _window;
 		Style _style;

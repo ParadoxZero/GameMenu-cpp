@@ -10,8 +10,8 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics.hpp>
 
-namespace game_menu {
-
+namespace game_menu
+{
 	typedef struct __menu_context MENU;
 
 	enum class Align
@@ -36,10 +36,10 @@ namespace game_menu {
 
 	struct Padding
 	{
-		std::int32_t top;
-		std::int32_t left;
-		std::int32_t bottom;
-		std::int32_t right;
+		float top;
+		float left;
+		float bottom;
+		float right;
 	};
 
 	struct Style

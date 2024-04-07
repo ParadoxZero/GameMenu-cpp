@@ -30,7 +30,7 @@ namespace game_menu
 {
 	float GetOffsetCoefficient(const Align& alignment);
 
-	Menu::Menu(sf::RenderTarget& window, MenuConfig config)
+	Menu::Menu(sf::RenderTarget& window, const MenuConfig& config)
 		: _window(window)
 		, _style(config.style)
 		, _title(config.title)
@@ -70,7 +70,7 @@ namespace game_menu
 		DrawMenu();
 	}
 
-	void Menu::WriteText(const std::string& str, const sf::Font& font, const std::uint32_t& size, const float& x, const float& y, const sf::Color& color)
+	void Menu::WriteText(const std::string& str, const sf::Font& font, const float& size, const float& x, const float& y, const sf::Color& color)
 	{
 		sf::Text text;
 		text.setString(str);
@@ -103,9 +103,9 @@ namespace game_menu
 		const auto titleLocationX = ((float)_window.getSize().x * titleOffsetCoefficient) + _style.PaddingTitle.left;
 		_titleLocation = sf::Vector2f(titleLocationX, _style.PaddingTitle.top);
 
-		float menuScreenHeight = _titleLocation.y + _style.PaddingItems.top;
-		float blockHeight = (float)_style.ItemFontSize * _style.MenuItemScaleFactor;
-		float offsetCoefficient = GetOffsetCoefficient(_style.ItemAlign);
+		const auto menuScreenHeight = _titleLocation.y + _style.PaddingItems.top;
+		const auto blockHeight = (float)_style.ItemFontSize * _style.MenuItemScaleFactor;
+		const auto offsetCoefficient = GetOffsetCoefficient(_style.ItemAlign);
 
 		const auto x = (float)_window.getSize().x * offsetCoefficient + _style.PaddingItems.left;
 		auto y = menuScreenHeight + blockHeight + _style.PaddingItems.top;
