@@ -72,13 +72,10 @@ namespace game_menu
 
 	void Menu::WriteText(const std::string& str, const sf::Font& font, const float& size, const sf::Vector2f& position, const sf::Color& color)
 	{
-		sf::Text text;
-		text.setString(str);
-		text.setFont(font);
+		sf::Text text(str, font, size);
 		text.setFillColor(color);
-		text.setCharacterSize(size);
 		const auto halfTextBoxWidth = text.getLocalBounds().width / 2.0f;
-		text.setOrigin(halfTextBoxWidth, 0);
+		text.setOrigin(halfTextBoxWidth, 0); // TODO: Is this necessary?
 
 		auto textX = position.x;
 		if (textX - halfTextBoxWidth < 0)
