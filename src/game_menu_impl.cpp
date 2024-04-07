@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 
-#include "SFML/Graphics/Color.hpp"
-#include "SFML/Window/Event.hpp"
+#include <SFML/Graphics/Color.hpp>
+#include <SFML/Window/Event.hpp>
 
 #include "game_menu_impl.h"
 
@@ -28,37 +28,38 @@ void menu_render(game_menu::MENU* menu)
 
 namespace game_menu 
 {
-	static float GetOffsetCoefficient(const Align& alignment)
+	float GetOffsetCoefficient(const Align& alignment);
+
+	Menu::Menu(sf::RenderTarget& window, MenuConfig config)
+		: _window(window)
+		, _style(config.style)
+		, _title(config.title)
 	{
-		switch (alignment)
+		for (auto& menu_item : config.items)
 		{
-		case Align::Left:
-			return 0.25f;
-		case Align::Right:
-			return 0.75f;
-		case Align::Center:
-		default:
-			// Center is the default alignment if unknown.
-			return 0.5f;
+			_items.push_back({ menu_item, {0, 0} });
+			std::cout << " Processing item " << menu_item.name << std::endl;
 		}
+
+		std::cout << "Size of items : " << _items.size() << std::endl;
 	}
 
-	void Menu::HandleEvent(sf::Event& event)
+	void Menu::HandleEvent(const sf::Event& event)
 	{
-		const auto itemCount = _items.size();
 		if (event.type == sf::Event::KeyPressed) 
 		{
-			if (event.key.code == sf::Keyboard::Up) 
+			const auto itemCount = _items.size();
+			switch (event.key.code)
 			{
+			case sf::Keyboard::Up:
 				_currentlySelectedItem = (_currentlySelectedItem + itemCount - 1) % itemCount;
-			}
-			else if (event.key.code == sf::Keyboard::Down) 
-			{
+				break;
+			case sf::Keyboard::Down:
 				_currentlySelectedItem = (_currentlySelectedItem + 1) % itemCount;
-			}
-			else if (event.key.code == sf::Keyboard::Return) 
-			{
+				break;
+			case sf::Keyboard::Return:
 				_items[_currentlySelectedItem].Data.action(_window);
+				break;
 			}
 		}
 	}
@@ -69,28 +70,28 @@ namespace game_menu
 		DrawMenu();
 	}
 
-	void Menu::WriteText(std::string str, sf::Font* font, unsigned int size, float x, float y, const Color color)
+	void Menu::WriteText(const std::string& str, const sf::Font& font, const unsigned int& size, const float& x, const float& y, const sf::Color& color)
 	{
-		sf::Color textColor(color);
 		sf::Text text;
 		text.setString(str);
-		text.setFont(*font);
-		text.setFillColor(textColor);
+		text.setFont(font);
+		text.setFillColor(color);
 		text.setCharacterSize(size);
 		sf::FloatRect textRect = text.getLocalBounds();
 		text.setOrigin(textRect.width / 2.0f, 0);
 
-		if (x - textRect.width / 2.0f < 0)
+		auto textX = x;
+		if (textX - textRect.width / 2.0f < 0)
 		{
-			x = textRect.width / 2 + _style.PaddingTitle.left;
+			textX = textRect.width / 2 + _style.PaddingTitle.left;
 		}
 
-		if (x + textRect.width / 2.0f > _window.getSize().x)
+		if (textX + textRect.width / 2.0f > _window.getSize().x)
 		{
-			x = _window.getSize().x - textRect.width / 2 + _style.PaddingTitle.left;
+			textX = _window.getSize().x - textRect.width / 2 + _style.PaddingTitle.left;
 		}
 
-		text.setPosition(sf::Vector2f(x, y));
+		text.setPosition(sf::Vector2f(textX, y));
 		_window.draw(text);
 	}
 
@@ -99,12 +100,10 @@ namespace game_menu
 		/* Setting title of menu */
 		const auto titleOffsetCoefficient = GetOffsetCoefficient(_style.TitleAlign);
 
-		float titleX = (float)_window.getSize().x * titleOffsetCoefficient;
-		float titleY = _style.PaddingTitle.top;
-		_titleLocation.X = (titleX + _style.PaddingTitle.left);
-		_titleLocation.Y = titleY;
+		const auto titleLocationX = ((float)_window.getSize().x * titleOffsetCoefficient) + _style.PaddingTitle.left;
+		_titleLocation = sf::Vector2f(titleLocationX, _style.PaddingTitle.top);
 
-		float menuScreenHeight = _titleLocation.Y + _style.PaddingItems.top;
+		float menuScreenHeight = _titleLocation.y + _style.PaddingItems.top;
 		float blockHeight = (float)_style.ItemFontSize * _style.MenuItemScaleFactor;
 		float offsetCoefficient = GetOffsetCoefficient(_style.ItemAlign);
 
@@ -114,21 +113,33 @@ namespace game_menu
 		/* Calculating Menu item locations */
 		for (auto i = 0; i < _items.size(); ++i)
 		{
-			_items[i].Location.X = x;
-			_items[i].Location.Y = y;
+			_items[i].Location = sf::Vector2f(x, y);
 			y += blockHeight;
 		}
 	}
 
 	void Menu::DrawMenu() 
 	{
-		WriteText(_title, _style.ItemFont, _style.TitleFontSize, _titleLocation.X, _titleLocation.Y, _style.colorScheme.titleColor);
-		game_menu::Color color(_style.colorScheme.itemColor);
+		WriteText(_title, _style.ItemFont, _style.TitleFontSize, _titleLocation.x, _titleLocation.y, _style.colorScheme.titleColor);
 
 		for (auto i = 0; i < _items.size(); ++i)
 		{
-			color = i == _currentlySelectedItem ? _style.colorScheme.selectedColor : color = _style.colorScheme.itemColor;
-			WriteText(_items[i].Data.name, _style.ItemFont, _style.ItemFontSize,_items[i].Location.X, _items[i].Location.Y, color);
+			auto color = i == _currentlySelectedItem ? _style.colorScheme.selectedColor : _style.colorScheme.itemColor;
+			WriteText(_items[i].Data.name, _style.ItemFont, _style.ItemFontSize,_items[i].Location.x, _items[i].Location.y, color);
+		}
+	}
+
+	float GetOffsetCoefficient(const Align& alignment)
+	{
+		switch (alignment)
+		{
+		case Align::Left:
+			return 0.25f;
+		case Align::Right:
+			return 0.75f;
+		case Align::Center:
+		default: // Center is the default alignment if unknown.
+			return 0.5f;
 		}
 	}
 }

@@ -1,17 +1,17 @@
 /*
 	Copyright (c) 2023 Sidhin S Thomas. All rights reserved
 */
+#pragma once
+
 #include <functional>
 #include <string>
 
-#include "SFML/Graphics/RenderTarget.hpp"
+#include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics.hpp>
 
 namespace game_menu {
 
 	typedef struct __menu_context MENU;
-
-	typedef uint32_t Color;
 
 	enum Align 
 	{
@@ -28,9 +28,9 @@ namespace game_menu {
 
 	struct ColorScheme
 	{
-		Color titleColor;
-		Color itemColor;
-		Color selectedColor;
+		sf::Color titleColor;
+		sf::Color itemColor;
+		sf::Color selectedColor;
 	};
 
 	struct Padding
@@ -43,8 +43,8 @@ namespace game_menu {
 
 	struct Style
 	{
-		sf::Font* TitleFont;
-		sf::Font* ItemFont;
+		sf::Font& TitleFont;
+		sf::Font& ItemFont;
 
 		uint32_t TitleFontSize;
 		uint32_t ItemFontSize;
