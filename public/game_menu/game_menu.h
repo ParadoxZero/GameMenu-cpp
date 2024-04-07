@@ -68,7 +68,7 @@ namespace game_menu
 		std::vector<MenuItem> items;
 		Style style;
 	};
-} // namespace game_menu
+}
 
 extern "C" 
 {

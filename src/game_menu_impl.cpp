@@ -35,7 +35,7 @@ namespace game_menu
 		, _style(config.style)
 		, _title(config.title)
 	{
-		for (auto& menu_item : config.items)
+		for (const auto& menu_item : config.items)
 		{
 			_items.push_back({ menu_item, {0, 0} });
 			std::cout << " Processing item " << menu_item.name << std::endl;
@@ -70,36 +70,35 @@ namespace game_menu
 		DrawMenu();
 	}
 
-	void Menu::WriteText(const std::string& str, const sf::Font& font, const float& size, const float& x, const float& y, const sf::Color& color)
+	void Menu::WriteText(const std::string& str, const sf::Font& font, const float& size, const sf::Vector2f& position, const sf::Color& color)
 	{
 		sf::Text text;
 		text.setString(str);
 		text.setFont(font);
 		text.setFillColor(color);
 		text.setCharacterSize(size);
-		sf::FloatRect textRect = text.getLocalBounds();
+		const auto textRect = text.getLocalBounds();
 		text.setOrigin(textRect.width / 2.0f, 0);
 
-		auto textX = x;
+		auto textX = position.x;
 		if (textX - textRect.width / 2.0f < 0)
 		{
-			textX = textRect.width / 2 + _style.PaddingTitle.left;
+			textX = textRect.width / 2.0f + _style.PaddingTitle.left;
 		}
 
 		if (textX + textRect.width / 2.0f > _window.getSize().x)
 		{
-			textX = _window.getSize().x - textRect.width / 2 + _style.PaddingTitle.left;
+			textX = _window.getSize().x - textRect.width / 2.0f + _style.PaddingTitle.left;
 		}
 
-		text.setPosition(sf::Vector2f(textX, y));
+		text.setPosition(sf::Vector2f(textX, position.y));
 		_window.draw(text);
 	}
 
 	void Menu::SetMenu()
 	{
-		/* Setting title of menu */
+		// Setting title of menu.
 		const auto titleOffsetCoefficient = GetOffsetCoefficient(_style.TitleAlign);
-
 		const auto titleLocationX = ((float)_window.getSize().x * titleOffsetCoefficient) + _style.PaddingTitle.left;
 		_titleLocation = sf::Vector2f(titleLocationX, _style.PaddingTitle.top);
 
@@ -107,25 +106,23 @@ namespace game_menu
 		const auto blockHeight = (float)_style.ItemFontSize * _style.MenuItemScaleFactor;
 		const auto offsetCoefficient = GetOffsetCoefficient(_style.ItemAlign);
 
+		// Calculating Menu item locations. X is constant, Y will be updated for each row.
 		const auto x = (float)_window.getSize().x * offsetCoefficient + _style.PaddingItems.left;
 		auto y = menuScreenHeight + blockHeight + _style.PaddingItems.top;
-
-		/* Calculating Menu item locations */
-		for (auto i = 0; i < _items.size(); ++i)
+		for (auto& item : _items)
 		{
-			_items[i].Location = sf::Vector2f(x, y);
+			item.Location = sf::Vector2f(x, y);
 			y += blockHeight;
 		}
 	}
 
 	void Menu::DrawMenu() 
 	{
-		WriteText(_title, _style.ItemFont, _style.TitleFontSize, _titleLocation.x, _titleLocation.y, _style.colorScheme.titleColor);
-
+		WriteText(_title, _style.ItemFont, _style.TitleFontSize, _titleLocation, _style.colorScheme.titleColor);
 		for (auto i = 0; i < _items.size(); ++i)
 		{
 			auto color = i == _currentlySelectedItem ? _style.colorScheme.selectedColor : _style.colorScheme.itemColor;
-			WriteText(_items[i].Data.name, _style.ItemFont, _style.ItemFontSize,_items[i].Location.x, _items[i].Location.y, color);
+			WriteText(_items[i].Data.name, _style.ItemFont, _style.ItemFontSize, _items[i].Location, color);
 		}
 	}
 
