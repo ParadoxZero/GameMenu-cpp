@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -36,6 +37,6 @@ namespace game_menu
 		std::string _title;
 		std::vector<Item> _items;
 		sf::Vector2f _titleLocation;
-		int _currentlySelectedItem = 0;
+		std::int32_t _currentlySelectedItem = 0;
 	};
 }

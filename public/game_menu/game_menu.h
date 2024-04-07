@@ -3,6 +3,7 @@
 */
 #pragma once
 
+#include <cstdint>
 #include <functional>
 #include <string>
 
@@ -13,7 +14,7 @@ namespace game_menu {
 
 	typedef struct __menu_context MENU;
 
-	enum Align 
+	enum class Align
 	{
 		Left = 0,
 		Center = 1,
@@ -35,10 +36,10 @@ namespace game_menu {
 
 	struct Padding
 	{
-		int top;
-		int left;
-		int bottom;
-		int right;
+		std::int32_t top;
+		std::int32_t left;
+		std::int32_t bottom;
+		std::int32_t right;
 	};
 
 	struct Style
@@ -67,7 +68,6 @@ namespace game_menu {
 		std::vector<MenuItem> items;
 		Style style;
 	};
-
 } // namespace game_menu
 
 extern "C" 

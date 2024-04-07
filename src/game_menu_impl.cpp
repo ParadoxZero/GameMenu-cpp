@@ -70,7 +70,7 @@ namespace game_menu
 		DrawMenu();
 	}
 
-	void Menu::WriteText(const std::string& str, const sf::Font& font, const unsigned int& size, const float& x, const float& y, const sf::Color& color)
+	void Menu::WriteText(const std::string& str, const sf::Font& font, const std::uint32_t& size, const float& x, const float& y, const sf::Color& color)
 	{
 		sf::Text text;
 		text.setString(str);
