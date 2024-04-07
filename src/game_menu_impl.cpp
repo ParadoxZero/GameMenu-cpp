@@ -77,18 +77,17 @@ namespace game_menu
 		text.setFont(font);
 		text.setFillColor(color);
 		text.setCharacterSize(size);
-		const auto textRect = text.getLocalBounds();
-		text.setOrigin(textRect.width / 2.0f, 0);
+		const auto halfTextBoxWidth = text.getLocalBounds().width / 2.0f;
+		text.setOrigin(halfTextBoxWidth, 0);
 
 		auto textX = position.x;
-		if (textX - textRect.width / 2.0f < 0)
+		if (textX - halfTextBoxWidth < 0)
 		{
-			textX = textRect.width / 2.0f + _style.PaddingTitle.left;
+			textX = halfTextBoxWidth + _style.PaddingTitle.left;
 		}
-
-		if (textX + textRect.width / 2.0f > _window.getSize().x)
+		else if (textX + halfTextBoxWidth > _window.getSize().x)
 		{
-			textX = _window.getSize().x - textRect.width / 2.0f + _style.PaddingTitle.left;
+			textX = _window.getSize().x - halfTextBoxWidth + _style.PaddingTitle.left;
 		}
 
 		text.setPosition(sf::Vector2f(textX, position.y));
