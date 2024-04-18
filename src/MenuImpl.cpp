@@ -13,9 +13,7 @@
 
 namespace Menu 
 {
-	sf::Text BuildText(const std::string& text, const sf::Font& font, const float& fontSize, const sf::Vector2u& windowSize,
-		const sf::Vector2f& basePosition, const float& paddingLeft);
-	float GetOffsetCoefficient(const Align& alignment);
+	sf::Text BuildText(const std::string& text, const Style& textStyle, const sf::Vector2u& windowSize, const float& scalingFactor, const float& yHeight);
 
 	IMenu::~IMenu() {}
 
@@ -23,21 +21,15 @@ namespace Menu
 		: _selectedColor(config.SelectedItemColor)
 		, _unselectedColor(config.ItemStyle.Color)
 	{
-		const auto titleOffsetCoefficient = GetOffsetCoefficient(config.TitleStyle.Alignment);
-		const auto titleLocationX = ((float)windowSize.x * titleOffsetCoefficient) + config.TitleStyle.Padding.Left;
-		_title = BuildText(config.TitleText, config.TitleStyle.Font, config.TitleStyle.FontSize, windowSize, 
-			sf::Vector2f(titleLocationX, config.TitleStyle.Padding.Top), config.TitleStyle.Padding.Left);
-		_title.setColor(config.TitleStyle.Color);
+		_title = BuildText(config.TitleText, config.TitleStyle, windowSize, config.ScalingFactor, 0.0);
 
-		// Calculating Menu item locations. X is constant, Y will be updated for each row.
-		const auto offsetCoefficient = GetOffsetCoefficient(config.ItemStyle.Alignment);
-		const auto x = ((float)windowSize.x * offsetCoefficient) + config.ItemStyle.Padding.Left;
-		auto y = config.TitleStyle.Padding.Top + _title.getGlobalBounds().height + config.TitleStyle.Padding.Bottom + config.ItemStyle.Padding.Top;
+		auto y = (config.TitleStyle.Padding.Top * config.ScalingFactor) + _title.getGlobalBounds().height + (config.TitleStyle.Padding.Bottom * config.ScalingFactor);
 		for (auto& item : config.Items)
 		{
-			auto text = BuildText(item.Name, config.ItemStyle.Font, config.ItemStyle.FontSize, windowSize, sf::Vector2f(x, y), config.ItemStyle.Padding.Left);
+			auto text = BuildText(item.Name, config.ItemStyle, windowSize, config.ScalingFactor, y);
 			_items.push_back(std::make_pair(text, item.Action));
-			y += config.ItemStyle.Padding.Top + text.getGlobalBounds().height + config.ItemStyle.Padding.Bottom;
+
+			y += (config.ItemStyle.Padding.Top * config.ScalingFactor) + text.getGlobalBounds().height + (config.ItemStyle.Padding.Bottom * config.ScalingFactor);
 		}
 	}
 
@@ -74,40 +66,28 @@ namespace Menu
 		}
 	}
 
-	sf::Text BuildText(const std::string& text, const sf::Font& font, const float& fontSize, const sf::Vector2u& windowSize,
-		const sf::Vector2f& basePosition, const float& paddingLeft)
+	sf::Text BuildText(const std::string& text, const Style& textStyle, const sf::Vector2u& windowSize, const float& scalingFactor, const float& yHeight)
 	{
-		sf::Text sfText(text, font, fontSize);
-		const auto halfTextBoxWidth = sfText.getLocalBounds().width / 2.0f;
-		sfText.setOrigin(halfTextBoxWidth, 0);
+		sf::Text sfText(text, textStyle.Font, (std::uint32_t)(textStyle.FontSize * scalingFactor));
+		sfText.setColor(textStyle.Color);
 
-		auto textX = basePosition.x;
-		if (textX - halfTextBoxWidth < 0)
+		auto x = textStyle.Padding.Left * scalingFactor;
+		if (textStyle.Alignment == Align::Center)
 		{
-			textX = halfTextBoxWidth + paddingLeft;
+			// The x position of the text is the mid point of the window, minus half the width of the text box including padding.
+			const auto totalTextLength = (textStyle.Padding.Left * scalingFactor) + sfText.getGlobalBounds().width + (textStyle.Padding.Right * scalingFactor);
+			x = (windowSize.x / 2.0) - (totalTextLength / 2.0) + (textStyle.Padding.Left * scalingFactor);
 		}
-		else if (textX + halfTextBoxWidth > windowSize.x)
+		else if (textStyle.Alignment == Align::Right)
 		{
-			textX = windowSize.x - halfTextBoxWidth + paddingLeft;
+			// The x position of the text is the right boarder of the window minus the full width of the text with the padding.
+			x = windowSize.x - (textStyle.Padding.Right * scalingFactor) - sfText.getGlobalBounds().width - (textStyle.Padding.Left * scalingFactor);
 		}
 
-		sfText.setPosition(sf::Vector2f(textX, basePosition.y));
+		const auto y = yHeight + (textStyle.Padding.Top * scalingFactor);
+		sfText.setPosition(x, y);
 
 		return sfText;
-	}
-
-	float GetOffsetCoefficient(const Align& alignment)
-	{
-		switch (alignment)
-		{
-		case Align::Left:
-			return 0.25f;
-		case Align::Right:
-			return 0.75f;
-		case Align::Center:
-		default: // Center is the default alignment if unknown.
-			return 0.5f;
-		}
 	}
 
 	std::shared_ptr<IMenu> BuildMenu(const sf::Vector2u& windowSize, const MenuConfig& menuConfig)

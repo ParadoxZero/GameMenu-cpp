@@ -80,6 +80,9 @@ int main()
 	// Test to use as the title of the menu.
 	menuConfig.TitleText = "My Menu Title";
 	
+	// Scaling factor to apply to the whole menu.
+	menuConfig.ScalingFactor = 1.0;
+
 	// Use the BuildMenu factory function in the IMenu header. This gives a fully built menu object.
 	auto menu = Menu::BuildMenu(window.getSize(), menuConfig);
 

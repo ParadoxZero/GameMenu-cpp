@@ -163,6 +163,11 @@ namespace Menu
 		/// Text to use on the title.
 		/// </summary>
 		std::string TitleText;
+
+		/// <summary>
+		/// Scaling factor to apply to the menu.
+		/// </summary>
+		float ScalingFactor = 1.0;
 	};
 
 	/// <summary>
