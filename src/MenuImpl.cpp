@@ -98,13 +98,14 @@ namespace Menu
 		auto x = textStyle.Padding.Left * scalingFactor;
 		if (textStyle.Alignment == Align::Center)
 		{
-			// The x position of the text is the mid point of the window, minus half the width of the text box including padding.
+			// The x position of the text is the mid point of the window, minus half the width of the text box including padding. Then the padding for the left 
+			// must be added back for the proper left indentation.
 			const auto totalTextLength = (textStyle.Padding.Left * scalingFactor) + sfText.getGlobalBounds().width + (textStyle.Padding.Right * scalingFactor);
 			x = (windowSize.x / 2.0) - (totalTextLength / 2.0) + (textStyle.Padding.Left * scalingFactor);
 		}
 		else if (textStyle.Alignment == Align::Right)
 		{
-			// The x position of the text is the right boarder of the window minus the full width of the text with the padding.
+			// The x position of the text is the right border of the window minus the full width of the text with the padding.
 			x = windowSize.x - (textStyle.Padding.Right * scalingFactor) - sfText.getGlobalBounds().width - (textStyle.Padding.Left * scalingFactor);
 		}
 
