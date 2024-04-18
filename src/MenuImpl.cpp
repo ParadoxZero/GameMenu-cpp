@@ -20,6 +20,7 @@ namespace Menu
 	MenuImpl::MenuImpl(const MenuConfig& config, const sf::Vector2u& windowSize)
 		: _selectedColor(config.SelectedItemColor)
 		, _unselectedColor(config.ItemStyle.Color)
+		, _config(config)
 	{
 		_title = BuildText(config.TitleText, config.TitleStyle, windowSize, config.ScalingFactor, 0.0);
 
@@ -51,6 +52,29 @@ namespace Menu
 			case sf::Keyboard::Return:
 				_items[_currentlySelectedItem].second(window);
 				break;
+			}
+		}
+		else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Button::Left)
+		{
+			sf::Vector2f mouseClickPosition(event.mouseButton.x, event.mouseButton.y);
+			for (size_t i = 0; i < _items.size(); ++i)
+			{
+				if (_items[i].first.getGlobalBounds().contains(mouseClickPosition))
+				{
+					_currentlySelectedItem = i;
+					_items[_currentlySelectedItem].second(window);
+				}
+			}
+		}
+		else if (event.type == sf::Event::MouseMoved)
+		{
+			sf::Vector2f mousePosition(event.mouseMove.x, event.mouseMove.y);
+			for (size_t i = 0; i < _items.size(); ++i)
+			{
+				if (_items[i].first.getGlobalBounds().contains(mousePosition))
+				{
+					_currentlySelectedItem = i;
+				}
 			}
 		}
 	}
