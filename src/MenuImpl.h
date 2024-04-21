@@ -26,8 +26,6 @@ namespace Menu
 		const sf::Color _selectedColor;
 		const sf::Color _unselectedColor;
 
-		const MenuConfig _config;
-
 		sf::Text _title;
 		std::vector<std::pair<sf::Text, std::function<void(sf::RenderTarget&)>>> _items;
 		

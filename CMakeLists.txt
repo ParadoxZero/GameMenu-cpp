@@ -63,7 +63,7 @@ if(WIN32)
         VERBATIM)
 endif()
 
-SET(BUILD_WITH_EXAMPLE ON CACHE BOOL "Build attached example")
+SET(BUILD_WITH_EXAMPLE OFF CACHE BOOL "Build attached example")
 
 if(BUILD_WITH_EXAMPLE)
     add_executable(example 

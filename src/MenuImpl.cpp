@@ -20,7 +20,6 @@ namespace Menu
 	MenuImpl::MenuImpl(const MenuConfig& config, const sf::Vector2u& windowSize)
 		: _selectedColor(config.SelectedItemColor)
 		, _unselectedColor(config.ItemStyle.Color)
-		, _config(config)
 	{
 		_title = BuildText(config.TitleText, config.TitleStyle, windowSize, config.ScalingFactor, 0.0);
 
