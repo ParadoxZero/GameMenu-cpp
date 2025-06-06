@@ -10,6 +10,7 @@ set(CMAKE_CXX_STANDARD 20)
 if (NOT DEFINED LINK_TYPE)
     message("Library link type not specified, using default - STATIC")
     set(LINK_TYPE STATIC)
+    option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 endif()
 
 include(FetchContent)
