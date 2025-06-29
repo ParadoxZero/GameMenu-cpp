@@ -27,23 +27,46 @@ namespace game_menu {
 void Menu::handleEvent(sf::Event &event) {
   auto max_items = _items.size();
   if (event.type == sf::Event::KeyPressed) {
-    if (event.key.code == sf::Keyboard::Up) {
-      _currently_selected_item =
-          (_currently_selected_item + max_items - 1) % max_items;
-    } else if (event.key.code == sf::Keyboard::Down) {
-      _currently_selected_item = (_currently_selected_item + 1) % max_items;
+    if (event.key.code == sf::Keyboard::Up ||
+        event.key.code == sf::Keyboard::Down) {
+      changeCurrSelectedItem(event.key.code == sf::Keyboard::Up);
     } else if (event.key.code == sf::Keyboard::Return) {
-      _items[_currently_selected_item].data.action(_window);
+      performCurrSelectedItemAction();
     }
   }
-}
+  else if (event.type == sf::Event::MouseMoved) {
+    sf::Vector2f mousePos(event.mouseMove.x, event.mouseMove.y);
+	for (int i = 0; i < _items.size(); ++i) {
+	  if (_items[i].textObj.getGlobalBounds().contains(mousePos)) {
+	    _currently_selected_item = i;
+	    break;
+	  }
+    }
+  }
+  else if (event.type == sf::Event::MouseButtonPressed) {
+	if (event.mouseButton.button == sf::Mouse::Left) {
+      sf::Vector2f mousePos(event.mouseButton.x, event.mouseButton.y);
+      for (int i = 0; i < _items.size(); ++i) {
+        if (_items[i].textObj.getGlobalBounds().contains(mousePos)) {
+          _items[i].data.action(_window);
+          break;
+        }
+      }
+    }
+  }
+  else if (event.type == sf::Event::MouseWheelScrolled) {
+	if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
+      changeCurrSelectedItem(event.mouseWheelScroll.delta > 0.0);
+	}
+  }
+} // handleEvent(...)
 
 void Menu::render() {
   setMenu();
   drawMenu();
-}
+} // render(...)
 
-void Menu::writeText(std::string str, sf::Font *font, unsigned int size,
+sf::Text Menu::writeText(std::string str, sf::Font *font, unsigned int size,
                      float x, float y, const Color color) {
   sf::Color textColor(color);
   sf::Text text;
@@ -61,6 +84,7 @@ void Menu::writeText(std::string str, sf::Font *font, unsigned int size,
   }
   text.setPosition(sf::Vector2f(x, y));
   _window.draw(text);
+  return text;
 } // writeText(...)
 
 void Menu::setMenu() {
@@ -135,10 +159,22 @@ void Menu::drawMenu() {
     } else {
       color = _style.colorScheme.itemColor;
     }
-    writeText(_items[i].data.name, _style.ItemFont, _style.ItemFontSize,
+    _items[i].textObj = writeText(_items[i].data.name, _style.ItemFont, _style.ItemFontSize,
               _items[i].location.x, _items[i].location.y, color);
   }
 
 } // drawMenu()
+
+void Menu::changeCurrSelectedItem(const bool moveUp) {
+    const auto maxItems = _items.size();
+    _currently_selected_item = moveUp
+        ? (_currently_selected_item + maxItems - 1) % maxItems
+        : (_currently_selected_item + 1) % maxItems;
+} // changeCurrSelectedItem()
+
+void Menu::performCurrSelectedItemAction()
+{
+    _items[_currently_selected_item].data.action(_window);
+} // performCurrSelectedItemAction()
 
 } // namespace game_menu
