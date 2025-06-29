@@ -42,6 +42,8 @@ private:
   void drawMenu();
   sf::Text writeText(std::string str, sf::Font* font, unsigned int size, float x,
                  float y, const Color color);
+  void changeCurrSelectedItem(const bool moveUp);
+  void performCurrSelectedItemAction();
   sf::RenderTarget &_window;
   Style _style;
   std::string _title;
