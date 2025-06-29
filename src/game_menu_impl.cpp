@@ -36,14 +36,23 @@ void Menu::handleEvent(sf::Event &event) {
       _items[_currently_selected_item].data.action(_window);
     }
   }
-}
+  if (event.type == sf::Event::MouseMoved) {
+    sf::Vector2f mousePos(event.mouseMove.x, event.mouseMove.y);
+	for (int i = 0; i < _items.size(); ++i) {
+	  if (_items[i].textObj.getGlobalBounds().contains(mousePos)) {
+	    _currently_selected_item = i;
+	    break;
+	  }
+    }
+  }
+} // handleEvent(...)
 
 void Menu::render() {
   setMenu();
   drawMenu();
-}
+} // render(...)
 
-void Menu::writeText(std::string str, sf::Font *font, unsigned int size,
+sf::Text Menu::writeText(std::string str, sf::Font *font, unsigned int size,
                      float x, float y, const Color color) {
   sf::Color textColor(color);
   sf::Text text;
@@ -61,6 +70,7 @@ void Menu::writeText(std::string str, sf::Font *font, unsigned int size,
   }
   text.setPosition(sf::Vector2f(x, y));
   _window.draw(text);
+  return text;
 } // writeText(...)
 
 void Menu::setMenu() {
@@ -135,7 +145,7 @@ void Menu::drawMenu() {
     } else {
       color = _style.colorScheme.itemColor;
     }
-    writeText(_items[i].data.name, _style.ItemFont, _style.ItemFontSize,
+    _items[i].textObj = writeText(_items[i].data.name, _style.ItemFont, _style.ItemFontSize,
               _items[i].location.x, _items[i].location.y, color);
   }
 

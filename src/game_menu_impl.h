@@ -20,6 +20,7 @@ struct coordinates {
 struct Item {
   MenuItem data;
   coordinates location;
+  sf::Text textObj;
 };
 
 class Menu {
@@ -39,7 +40,7 @@ public:
 private:
   void setMenu();
   void drawMenu();
-  void writeText(std::string str, sf::Font* font, unsigned int size, float x,
+  sf::Text writeText(std::string str, sf::Font* font, unsigned int size, float x,
                  float y, const Color color);
   sf::RenderTarget &_window;
   Style _style;
