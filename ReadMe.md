@@ -69,6 +69,9 @@ The main purpose of the library is to make creation of menu's in games easy. Thi
 
 ## Dependencies
   * [Simple and Fast Multimedia Library](http://www.sfml-dev.org/index.php)
+
+### Linux
+` sudo apt install libflac-dev libvorbis-dev libopenal-dev libudev-dev `
       
 ## Installing
 Install via cmake's FetchContent script - 
