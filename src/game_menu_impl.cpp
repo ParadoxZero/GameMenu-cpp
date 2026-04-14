@@ -65,10 +65,6 @@ void Menu::writeText(std::string str, sf::Font *font, unsigned int size,
 
 void Menu::setMenu() {
 
-  //   std::cout << "screen size:" << window.getSize().x << " " <<
-  //   window.getSize().y
-  //             << std::endl;
-
   /* Setting title of menu */
   {
     /* Small scope just to be able to freely use the variable names */

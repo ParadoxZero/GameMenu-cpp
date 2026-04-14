@@ -28,9 +28,7 @@ public:
       : _window(window), _style(config.style), _title(config.title) {
     for (auto &menu_item : config.items) {
       _items.push_back({menu_item, {0, 0}});
-      std::cout << " Processing item " << menu_item.name << std::endl;
     }
-    std::cout << "Size of items : " << _items.size() << std::endl;
   }
 
   void handleEvent(sf::Event &event);
